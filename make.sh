@@ -6,5 +6,3 @@ g++ main.cpp\
     -I include -I ../glfw/include\
     -L ../glfw/src\
     -lglfw3 -lGL -lGLEW  -lX11 -lXxf86vm -lpthread -lXrandr -lXcursor -lXi
-
-./main

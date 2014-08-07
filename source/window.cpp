@@ -16,6 +16,7 @@ namespace kraken {
                                  nullptr);
       while(!glfwWindowShouldClose(handle_)) {
          glfwPollEvents();
+         glfwSwapBuffers(handle_);
       }
       
    }
