@@ -16,6 +16,6 @@ namespace kraken {
 
       GLfloat* data = reinterpret_cast<GLfloat*> (data_);
 
-      delete data;
+      delete[] data;
    }
 }
