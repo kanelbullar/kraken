@@ -6,13 +6,19 @@ namespace kraken {
    resolution_(std::array<unsigned short,2>{width,height}),
    handle_(nullptr),
    title_("Release the kraken!"),
-   frame_number_(0)
+   frame_number_(0),
+   pipeline_(pipeline())
    {}
 
 
    void window::open() {
 
       glfwInit();
+      glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR,4);
+      glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR,0);
+      glfwWindowHint(GLFW_OPENGL_PROFILE,GLFW_OPENGL_CORE_PROFILE);
+      glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT,GL_TRUE);
+      glfwWindowHint(GLFW_RESIZABLE,GL_FALSE);
 
       handle_ = glfwCreateWindow(resolution_[0],
                                  resolution_[1],
@@ -20,9 +26,12 @@ namespace kraken {
                                  nullptr,
                                  nullptr);
 
+      glfwMakeContextCurrent(handle_);
+
       while(!glfwWindowShouldClose(handle_)) {
 
          glfwPollEvents();
+         pipeline_.draw();
          glfwSwapBuffers(handle_);
          fps_display();
       }

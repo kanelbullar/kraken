@@ -12,6 +12,7 @@ namespace kraken {
       std::array<unsigned short, 3> dim {width,height,depth};
 
       switch(type) {
+
          case RANDOM: return random(dim);
          case SPHERE: return sphere(dim);
          default:     return vector_field(dim,nullptr);   

@@ -8,6 +8,7 @@ namespace kraken {
 enum generation_type {RANDOM, SPHERE};
 
 class vector_field_generator {
+
    public :
    
    vector_field const generate(unsigned short,
@@ -15,7 +16,7 @@ class vector_field_generator {
                                unsigned short,
                                generation_type) const;
    
-   private:
+   private :
 
    vector_field const random(std::array<unsigned short, 3>) const;
    vector_field const sphere(std::array<unsigned short, 3>) const;
