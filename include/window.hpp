@@ -22,6 +22,9 @@ class window {
 
    void fps_display();
 
+   // callback functions
+   static void key(GLFWwindow*, int, int, int, int);
+
    std::array<unsigned short,2> resolution_;
    GLFWwindow*                  handle_;
    std::string                  title_;

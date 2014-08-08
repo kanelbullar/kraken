@@ -27,6 +27,7 @@ namespace kraken {
                                  nullptr);
 
       glfwMakeContextCurrent(handle_);
+      glfwSetKeyCallback(handle_,key);
 
       while(!glfwWindowShouldClose(handle_)) {
 
@@ -60,4 +61,17 @@ namespace kraken {
       ++frame_number_;
    }
 
+
+   void window::
+
+   key(GLFWwindow* window, int key, int scancode, int action, int mods) {
+
+      switch(key) {
+
+         case GLFW_KEY_ESCAPE :
+
+         glfwSetWindowShouldClose(window,GL_TRUE);
+         break;
+      }
+   }
 }
