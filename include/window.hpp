@@ -23,6 +23,7 @@ class window {
    private:
 
    void fps_display();
+   void gl_config();
 
    // callback functions
    static void key(GLFWwindow*, int, int, int, int);
