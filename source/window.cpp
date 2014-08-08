@@ -50,6 +50,7 @@ namespace kraken {
 
       new_title.append("  |  FPS : ");      
       new_title.append(std::to_string(frame_number_/time));
+      new_title.erase(new_title.rfind('.')+3,4);
       glfwSetWindowTitle(handle_,new_title.c_str());
 
       if(time >= 1.0) {
