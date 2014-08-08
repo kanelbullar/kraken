@@ -3,6 +3,7 @@
 
 #include <GLFW/glfw3.h>
 #include <array>
+#include <string>
 
 namespace kraken {
 
@@ -16,9 +17,12 @@ class window {
 
    private:
 
-   std::array<unsigned short,2> resolution_;
-   GLFWwindow* handle_;
+   void fps_display();
 
+   std::array<unsigned short,2> resolution_;
+   GLFWwindow*                  handle_;
+   std::string                  title_;
+   unsigned short               frame_number_;
 };
 
 }
