@@ -26,14 +26,14 @@ namespace kraken {
 
       unsigned long size = dim[0]*dim[1]*dim[2];
 
-      GLfloat* data = new float[size];
+      float* data = new float[size];
 
       for(unsigned long index = 0 ; index < size ; ++index)
       {
          data[index] = 0;
       }
 
-      GLvoid* data_ptr = reinterpret_cast<GLvoid*> (data);
+      void* data_ptr = reinterpret_cast<void*> (data);
    
       return vector_field(dim,data_ptr);
    }

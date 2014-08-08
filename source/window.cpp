@@ -14,8 +14,8 @@ namespace kraken {
    void window::open() {
 
       glfwInit();
-      glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR,8);
-      glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR,0);
+      glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR,3);
+      glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR,3);
       glfwWindowHint(GLFW_OPENGL_PROFILE,GLFW_OPENGL_CORE_PROFILE);
       glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT,GL_TRUE);
       glfwWindowHint(GLFW_RESIZABLE,GL_FALSE);
@@ -29,6 +29,11 @@ namespace kraken {
       if(handle_ == nullptr) throw exception("window creation failed");
 
       glfwMakeContextCurrent(handle_);
+
+      glewExperimental = GL_TRUE;
+      GLenum glew_init = glewInit();
+      if(glew_init != GLEW_OK) throw exception("glew initialization failed");
+
       glfwSetKeyCallback(handle_,key);
 
       while(!glfwWindowShouldClose(handle_)) {

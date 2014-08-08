@@ -4,7 +4,7 @@ namespace kraken {
 
    vector_field::
    
-   vector_field(std::array<unsigned short,3> const& dim, GLvoid* data) :
+   vector_field(std::array<unsigned short,3> const& dim, void* data) :
    dim_(dim),
    data_(data)   
    {}
@@ -14,7 +14,7 @@ namespace kraken {
 
    ~vector_field() {
 
-      GLfloat* data = reinterpret_cast<GLfloat*> (data_);
+      float* data = reinterpret_cast<float*> (data_);
 
       delete[] data;
    }

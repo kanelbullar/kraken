@@ -1,7 +1,7 @@
 #ifndef KRAKEN_PIPELINE
 #define KRAKEN_PIPELINE
 
-#include <GL/gl.h>
+#include <GL/glew.h>
 
 namespace kraken {
 

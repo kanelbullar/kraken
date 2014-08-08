@@ -4,10 +4,11 @@
 #include <array>
 #include <string>
 
-#include <GLFW/glfw3.h>
-
 #include <exception.hpp>
 #include <pipeline.hpp>
+#include <vector_field.hpp>
+
+#include <GLFW/glfw3.h>
 
 namespace kraken {
 
