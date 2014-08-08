@@ -14,7 +14,7 @@ namespace kraken {
    void window::open() {
 
       glfwInit();
-      glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR,4);
+      glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR,8);
       glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR,0);
       glfwWindowHint(GLFW_OPENGL_PROFILE,GLFW_OPENGL_CORE_PROFILE);
       glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT,GL_TRUE);
@@ -25,6 +25,8 @@ namespace kraken {
                                  title_.c_str(),
                                  nullptr,
                                  nullptr);
+
+      if(handle_ == nullptr) throw exception("window creation failed");
 
       glfwMakeContextCurrent(handle_);
       glfwSetKeyCallback(handle_,key);

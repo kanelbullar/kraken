@@ -1,4 +1,5 @@
 g++ main.cpp\
+   source/exception.cpp\
    source/vector_field.cpp\
    source/vector_field_generator.cpp\
    source/pipeline.cpp\

@@ -6,6 +6,7 @@
 
 #include <GLFW/glfw3.h>
 
+#include <exception.hpp>
 #include <pipeline.hpp>
 
 namespace kraken {
