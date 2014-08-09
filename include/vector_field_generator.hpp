@@ -2,6 +2,8 @@
 #define KRAKEN_VECTOR_FIELD_GENERATOR
 
 #include <vector_field.hpp>
+#include <random>
+#include <iostream>
 
 namespace kraken {
 
@@ -11,15 +13,9 @@ class vector_field_generator {
 
    public :
    
-   vector_field const generate(unsigned short,
-                               unsigned short,
-                               unsigned short,
-                               generation_type) const;
-   
-   private :
+   static vector_field const random(unsigned short, unsigned short, unsigned short);
+   static vector_field const sphere(unsigned short, unsigned short, unsigned short);
 
-   vector_field const random(std::array<unsigned short, 3>) const;
-   vector_field const sphere(std::array<unsigned short, 3>) const;
 };
 
 }

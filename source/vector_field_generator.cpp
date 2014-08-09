@@ -2,7 +2,7 @@
 
 namespace kraken {
 
-   vector_field const vector_field_generator::
+   /*vector_field const vector_field_generator::
    
    generate(unsigned short width, 
             unsigned short height,
@@ -17,33 +17,43 @@ namespace kraken {
          case SPHERE: return sphere(dim);
          default:     return vector_field(dim,nullptr);   
       }
-   }
-
+   }*/
 
    vector_field const vector_field_generator::
 
-   random(std::array<unsigned short, 3> dim) const {
+   random(unsigned short width, 
+          unsigned short height, 
+          unsigned short depth) {
 
-      unsigned long size = dim[0]*dim[1]*dim[2];
+      std::default_random_engine generator;
+      std::uniform_real_distribution<float> distribution(0,1);
+   
+      std::array<unsigned short, 3> dim {width,height,depth};   
+
+      unsigned long size = width*height*depth;
 
       float* data = new float[size];
 
       for(unsigned long index = 0 ; index < size ; ++index)
       {
-         data[index] = 0;
+         data[index] = distribution(generator);
       }
 
       void* data_ptr = reinterpret_cast<void*> (data);
    
-      return vector_field(dim,data_ptr);
+      return vector_field(dim, data_ptr);
    }
 
 
    vector_field const vector_field_generator::
 
-   sphere(std::array<unsigned short, 3> dim) const {
+   sphere(unsigned short width, 
+          unsigned short height, 
+          unsigned short depth) {
+
+      std::array<unsigned short, 3> dim {width,height,depth};
       
-      return vector_field(dim,nullptr);
+      return vector_field(dim, nullptr);
    }
 
 }
