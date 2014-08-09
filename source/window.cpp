@@ -4,7 +4,7 @@ namespace kraken {
 
    window::window(unsigned short width,unsigned short height) :
    res_(std::array<unsigned short,2>{width,height}),
-   title_("Kraken"),
+   title_("Release the kraken!"),
    handle_(-1)
    {}
 
@@ -30,6 +30,7 @@ namespace kraken {
       if(glew_init != GLEW_OK) throw exception("glew initialisation failed");
 
       glutDisplayFunc(pipeline::display);
+      glutKeyboardFunc(pipeline::key);
 
       glutMainLoop();
    }

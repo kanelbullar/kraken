@@ -13,4 +13,20 @@ namespace kraken {
       glutSwapBuffers();
       glutPostRedisplay();
    }
+
+
+   void pipeline::
+
+   key(unsigned char key, int x, int y) {
+
+      unsigned short key_id = static_cast<unsigned short> (key);
+
+      switch(key_id)
+      {
+         case 27 :
+
+         glutLeaveMainLoop();
+         break;
+      }
+   }
 }

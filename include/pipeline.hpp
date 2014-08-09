@@ -11,6 +11,7 @@ class pipeline {
    public :
 
    static void display();
+   static void key(unsigned char,int,int);
 };
 
 }
