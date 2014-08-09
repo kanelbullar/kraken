@@ -4,11 +4,7 @@
 #include <array>
 #include <string>
 
-#include <exception.hpp>
 #include <pipeline.hpp>
-#include <vector_field.hpp>
-
-#include <GLFW/glfw3.h>
 
 namespace kraken {
 
@@ -16,23 +12,14 @@ class window {
 
    public:
 
-   window(unsigned short, unsigned short);
-   
-   void open();
+   window(unsigned short,unsigned short);
+
+   void open(int,char**);
 
    private:
 
-   void fps_display();
-   void gl_config();
-
-   // callback functions
-   static void key(GLFWwindow*, int, int, int, int);
-
-   std::array<unsigned short,2> resolution_;
-   GLFWwindow*                  handle_;
+   std::array<unsigned short,2> res_;
    std::string                  title_;
-   unsigned short               frame_number_;
-   pipeline                     pipeline_;
 };
 
 }

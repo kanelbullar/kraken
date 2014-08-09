@@ -2,6 +2,7 @@
 #define KRAKEN_PIPELINE
 
 #include <GL/glew.h>
+#include <GL/glut.h>
 
 namespace kraken {
 
@@ -9,7 +10,7 @@ class pipeline {
 
    public :
 
-   void draw();
+   static void display();
 };
 
 }
