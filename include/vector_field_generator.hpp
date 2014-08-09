@@ -7,14 +7,19 @@
 
 namespace kraken {
 
-enum generation_type {RANDOM, SPHERE};
+typedef unsigned short ui16;
+typedef std::array<ui16,3> vec3;
+
+enum direction_type {UP, DOWN, RIGHT, LEFT, FRONT, BACK};
+enum sphere_type {INSIDE, OUTSIDE};
 
 class vector_field_generator {
 
    public :
    
-   static vector_field const random(unsigned short, unsigned short, unsigned short);
-   static vector_field const sphere(unsigned short, unsigned short, unsigned short);
+   static vector_field const random(vec3 const&);
+   static vector_field const one_direction(vec3, direction_type);
+   static vector_field const sphere(vec3, sphere_type, vec3);
 
 };
 
