@@ -12,6 +12,9 @@ class pipeline {
 
    static void display();
    static void key(unsigned char,int,int);
+   static void time(int);
+
+   static unsigned short frame_number_;
 };
 
 }

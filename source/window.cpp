@@ -22,6 +22,9 @@ namespace kraken {
       glutInitContextFlags(GLUT_FORWARD_COMPATIBLE);
       glutInitContextProfile(GLUT_CORE_PROFILE);
 
+      glutSetOption(GLUT_ACTION_ON_WINDOW_CLOSE,
+                    GLUT_ACTION_GLUTMAINLOOP_RETURNS);
+
       handle_ = glutCreateWindow(title_.c_str());
 
       glewExperimental = GL_TRUE;
@@ -30,7 +33,10 @@ namespace kraken {
       if(glew_init != GLEW_OK) throw exception("glew initialisation failed");
 
       glutDisplayFunc(pipeline::display);
+      glutTimerFunc(250,pipeline::time,0);
       glutKeyboardFunc(pipeline::key);
+
+      pipeline::frame_number_ = 0;
 
       glutMainLoop();
    }
