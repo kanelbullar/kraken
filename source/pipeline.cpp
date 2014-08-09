@@ -4,8 +4,6 @@
 
 namespace kraken {
 
-unsigned short pipeline::frame_number_ = 0;
-
    void pipeline::
 
    display() {
@@ -49,4 +47,7 @@ unsigned short pipeline::frame_number_ = 0;
 
       glutTimerFunc(250,time,0);
    }
+
+
+   unsigned short pipeline::frame_number_(0);
 }

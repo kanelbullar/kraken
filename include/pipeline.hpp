@@ -14,6 +14,8 @@ class pipeline {
    static void key(unsigned char,int,int);
    static void time(int);
 
+   private :
+
    static unsigned short frame_number_;
 };
 

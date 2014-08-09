@@ -36,8 +36,6 @@ namespace kraken {
       glutTimerFunc(250,pipeline::time,0);
       glutKeyboardFunc(pipeline::key);
 
-      pipeline::frame_number_ = 0;
-
       glutMainLoop();
    }
 }
