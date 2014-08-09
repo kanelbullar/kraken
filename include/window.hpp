@@ -4,6 +4,7 @@
 #include <array>
 #include <string>
 
+#include <exception.hpp>
 #include <pipeline.hpp>
 
 namespace kraken {
@@ -20,6 +21,7 @@ class window {
 
    std::array<unsigned short,2> res_;
    std::string                  title_;
+   int                          handle_;
 };
 
 }
