@@ -1,4 +1,5 @@
 #include <vector_field_generator.hpp>
+#include <iostream>
 
 namespace kraken {
 
@@ -60,7 +61,7 @@ namespace kraken {
       return vector_field(dim, data_ptr);
    }
 
-   //SPHERE
+   // TODO: SPHERE
    vector_field const vector_field_generator::
 
    sphere(vec3 const& dim, vec3 const& center, sphere_type type) {
