@@ -26,8 +26,7 @@ namespace kraken {
    //ONE DIRECTION
    vector_field const vector_field_generator::
 
-   one_direction(vec3 dim,
-                 direction_type type) {  
+   one_direction(vec3 const& dim, direction_type type) {  
 
       unsigned long size = dim[0]*dim[1]*dim[2];
 
@@ -37,17 +36,17 @@ namespace kraken {
 
       switch (type) {
          
-         case UP:    y =  1;   break;
+         case UP    :  y =  1;   break;
 
-         case DOWN:  y = -1;   break;
+         case DOWN  :  y = -1;   break;
 
-         case RIGHT: x =  1;   break;
+         case RIGHT :  x =  1;   break;
 
-         case LEFT:  x = -1;   break;
+         case LEFT  :  x = -1;   break;
 
-         case FRONT: z =  1;   break;
+         case FRONT :  z =  1;   break;
 
-         case BACK:  z = -1;   break;
+         case BACK  :  z = -1;   break;
       }
       
       for(unsigned long index = 0 ; index < size ; ++index) {  
@@ -64,7 +63,7 @@ namespace kraken {
    //SPHERE
    vector_field const vector_field_generator::
 
-   sphere(vec3 dim, sphere_type type, vec3 center) {
+   sphere(vec3 const& dim, vec3 const& center, sphere_type type) {
       
       return vector_field(dim, nullptr);
    }

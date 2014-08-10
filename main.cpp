@@ -2,6 +2,7 @@
 
 #include <vector_field_generator.hpp>
 #include <window.hpp>
+#include <particle_emitter.hpp>
 
 int main(int argc, char** argv) {
    
