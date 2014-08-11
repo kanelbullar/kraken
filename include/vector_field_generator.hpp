@@ -18,9 +18,9 @@ class vector_field_generator {
 
    public :
    
-   static vector_field const random(vec3 const&);
-   static vector_field const one_direction(vec3 const&, direction_type);
-   static vector_field const sphere(vec3 const&, vec3 const&, sphere_type);
+   vector_field const random(vec3 const&);
+   vector_field const one_direction(vec3 const&, direction_type);
+   vector_field const sphere(vec3 const&, vec3 const&, sphere_type);
 
 };
 

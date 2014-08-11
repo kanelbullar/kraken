@@ -8,9 +8,11 @@ int main(int argc, char** argv) {
    
    std::cout << "Release the kraken!" << std::endl;
 
-   kraken::vector_field 
+   /*kraken::vector_field field 
    vectorfield(kraken::vector_field_generator::
-   random(std::array<unsigned short, 3>{{300,300,300}}));
+   random(std::array<unsigned short, 3>{{7,13,23}}));*/
+
+   
 
    kraken::window window(1000,800);
 
