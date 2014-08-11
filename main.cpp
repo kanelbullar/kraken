@@ -12,8 +12,6 @@ int main(int argc, char** argv) {
    vectorfield(kraken::vector_field_generator::
    random(std::array<unsigned short, 3>{{7,13,23}}));*/
 
-   
-
    kraken::window window(1000,800);
 
    window.open(argc,argv);

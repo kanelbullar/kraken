@@ -9,7 +9,7 @@ namespace kraken {
       glClearColor(0.2,0.2,0.2,1.0);
 
       std::array<std::string,3> shader_stages = {{"pass",
-                                                 "triangle_pass",
+                                                 "hedgehog",
                                                  "white"}};
 
       config_.add_shader(shader_stages[0],GL_VERTEX_SHADER);
@@ -24,7 +24,7 @@ namespace kraken {
    void pipeline::display() {
 
       glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-      glDrawArrays(GL_TRIANGLES,0,9);
+      glDrawArrays(GL_POINTS,0,1);
       glutSwapBuffers();
       glutPostRedisplay();
 
