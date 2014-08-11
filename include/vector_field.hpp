@@ -9,6 +9,7 @@ struct vector_field {
 
    vector_field(std::array<unsigned short,3> const&, void*);
    ~vector_field();
+   //tex_to_coord(unsigned long);
 
    std::array<unsigned short,3> dim_;
    void* data_;

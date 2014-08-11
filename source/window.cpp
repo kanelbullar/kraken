@@ -3,7 +3,7 @@
 namespace kraken {
 
    window::window(unsigned short width,unsigned short height) :
-   res_(std::array<unsigned short,2>{width,height}),
+   res_(std::array<unsigned short,2>{{width,height}}),
    title_("Release the kraken!"),
    handle_(-1)
    {}

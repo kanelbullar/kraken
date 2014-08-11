@@ -4,6 +4,7 @@
 #include <vector_field.hpp>
 #include <random>
 #include <iostream>
+#include <progress.hpp>
 
 namespace kraken {
 

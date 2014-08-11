@@ -8,9 +8,9 @@ namespace kraken {
 
       glClearColor(0.2,0.2,0.2,1.0);
 
-      std::array<std::string,3> shader_stages = {"pass",
+      std::array<std::string,3> shader_stages = {{"pass",
                                                  "triangle_pass",
-                                                 "white"};
+                                                 "white"}};
 
       config_.add_shader(shader_stages[0],GL_VERTEX_SHADER);
       config_.add_shader(shader_stages[1],GL_GEOMETRY_SHADER);

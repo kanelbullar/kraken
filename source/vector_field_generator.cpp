@@ -1,5 +1,4 @@
 #include <vector_field_generator.hpp>
-#include <iostream>
 
 namespace kraken {
 
@@ -15,9 +14,12 @@ namespace kraken {
 
       float* data = new float[size];
 
+      progress status("RANDOM VECTOR FIELD",size);
       for(unsigned long index = 0 ; index < size ; ++index) {
          data[index] = distribution(generator);
+         status.update(index);
       }
+      status.finalize();
 
       void* data_ptr = reinterpret_cast<void*> (data);
    
