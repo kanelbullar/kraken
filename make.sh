@@ -1,5 +1,6 @@
 g++ main.cpp\
    source/exception.cpp\
+   source/gl_config.cpp\
    source/vector_field.cpp\
    source/vector_field_generator.cpp\
    source/pipeline.cpp\

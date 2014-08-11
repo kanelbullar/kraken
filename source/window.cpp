@@ -32,6 +32,7 @@ namespace kraken {
 
       if(glew_init != GLEW_OK) throw exception("glew initialisation failed");
 
+      pipeline::init();
       glutDisplayFunc(pipeline::display);
       glutTimerFunc(250,pipeline::time,0);
       glutKeyboardFunc(pipeline::key);
