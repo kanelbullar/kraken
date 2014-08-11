@@ -1,5 +1,10 @@
 #include <gl_config.hpp>
 
+#define GLM_FORCE_RADIANS
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
+
 #include <algorithm>
 #include <fstream>
 #include <iostream>
@@ -122,6 +127,46 @@ namespace kraken {
    }
 
 
+   void gl_config::load_default() {
+
+      GLfloat pos[] = {-1.0,-1.0,-2.0,
+                        1.0,-1.0,-2.0,
+                        0.0, 1.0,-2.0};
+
+      GLuint vbo,vao;
+
+      glGenBuffers(1,&vbo);
+      glGenVertexArrays(1,&vao);
+
+      vbo_store_.push_back(vbo);
+
+      glBindBuffer(GL_ARRAY_BUFFER,vbo);
+      glBufferData(GL_ARRAY_BUFFER,sizeof(pos),pos,GL_STATIC_DRAW);
+      glBindVertexArray(vao);
+
+      GLuint program_id(program_store_.find("triangle")->second);
+
+      GLint attr_pos(glGetAttribLocation(program_id,"pos"));
+   
+      glEnableVertexAttribArray(attr_pos);
+      glVertexAttribPointer(attr_pos,3,GL_FLOAT,GL_FALSE,0,0);
+
+      glm::mat4 perspective = 
+
+      glm::perspective(45.0f,static_cast<float> (1000) / 800,0.1f,100.0f);
+
+      GLint uniform_loc = glGetUniformLocation(program_id,"projection");
+      glUniformMatrix4fv(uniform_loc,1,GL_FALSE,glm::value_ptr(perspective));
+
+      glm::mat4 view = glm::lookAt(glm::vec3(0.0f,0.0f,10.0f),
+                                   glm::vec3(0.0f,0.0f,0.0f),
+                                   glm::vec3(0.0f,1.0f,0.0f));
+
+      uniform_loc = glGetUniformLocation(program_id,"view");
+      glUniformMatrix4fv(uniform_loc,1,GL_FALSE,glm::value_ptr(view));
+   }
+
+
    bool gl_config::valid_stage(GLenum type) const {
 
       if(type != GL_VERTEX_SHADER   &&
@@ -149,20 +194,27 @@ namespace kraken {
 
       if(!input) throw exception("shader file : " + path + " doesn't exist");
 
-      std::filebuf* buffer_ptr(input.rdbuf());
+      input.seekg(0,input.end);
 
-      std::size_t size(buffer_ptr->pubseekoff(0,input.end,input.in));
+      int size(input.tellg());
 
-      buffer_ptr->pubseekpos(0,input.in);
+      input.seekg(0,input.beg);
 
       char* buffer(new char[size]);
+
+      unsigned short index = 0;
       
-      buffer_ptr->sgetn(buffer,size);   
+      while(input.good()) {
+
+         buffer[index] = input.get();
+
+         ++index;
+      } 
 
       input.close();
 
       return buffer;
-   }
+   } 
 
 
    std::string const gl_config::
@@ -209,6 +261,7 @@ namespace kraken {
 
          std::cerr << std::endl 
                    << "shader:" << name << shader_suffix(stage->second.type_)
+                   << std::endl
                    << " line: " << info_buffer
                    << std::endl;
 

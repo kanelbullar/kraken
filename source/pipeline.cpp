@@ -17,11 +17,14 @@ namespace kraken {
       config_.add_shader(shader_stages[2],GL_FRAGMENT_SHADER);
       config_.add_program("triangle",shader_stages);
       config_.enable_program("triangle");
+
+      config_.load_default();
    }
 
    void pipeline::display() {
 
       glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+      glDrawArrays(GL_TRIANGLES,0,9);
       glutSwapBuffers();
       glutPostRedisplay();
 

@@ -4,6 +4,7 @@
 #include <array>
 #include <map>
 #include <string>
+#include <vector>
 
 #include <GL/glew.h>
 #include <GL/freeglut.h>
@@ -33,6 +34,8 @@ class gl_config {
 
    void reload_shader() const;
 
+   void load_default();
+
    private :
 
    bool  valid_stage(GLenum) const;
@@ -44,6 +47,7 @@ class gl_config {
    std::string shader_path_;
    std::map<std::string,shader_stage> shader_store_;
    std::map<std::string,GLuint> program_store_;
+   std::vector<GLuint> vbo_store_;
 };
 
 }
