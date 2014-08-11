@@ -129,9 +129,7 @@ namespace kraken {
 
    void gl_config::load_default() {
 
-      GLfloat pos[] = {-1.0,-1.0,-2.0,
-                        1.0,-1.0,-2.0,
-                        0.0, 1.0,-2.0};
+      GLfloat pos[] = {0.0,0.0,0.0};
 
       GLuint vbo,vao;
 
@@ -158,7 +156,7 @@ namespace kraken {
       GLint uniform_loc = glGetUniformLocation(program_id,"projection");
       glUniformMatrix4fv(uniform_loc,1,GL_FALSE,glm::value_ptr(perspective));
 
-      glm::mat4 view = glm::lookAt(glm::vec3(0.0f,0.0f,10.0f),
+      glm::mat4 view = glm::lookAt(glm::vec3(5.0f,0.0f,5.0f),
                                    glm::vec3(0.0f,0.0f,0.0f),
                                    glm::vec3(0.0f,1.0f,0.0f));
 
