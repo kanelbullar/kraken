@@ -38,16 +38,22 @@ class gl_config {
 
    private :
 
-   bool  valid_stage(GLenum) const;
-   char* load_shader(std::string const&,GLenum type) const;
-   void  compile_feedback(std::string const&) const;
+   void clean(GLuint) const;
 
+   char* load_shader(std::string const&,GLenum type) const;
+
+   void  compile_feedback(std::string const&) const;
+   void  link_feedback(std::string const&) const;
+
+   bool  valid_stage(GLenum) const;
    std::string const shader_suffix(GLenum) const;
 
+
    std::string shader_path_;
-   std::map<std::string,shader_stage> shader_store_;
-   std::map<std::string,GLuint> program_store_;
-   std::vector<GLuint> vbo_store_;
+
+   std::map<std::string,shader_stage>     shader_store_;
+   std::map<GLuint,std::array<GLuint,3> > link_;
+   std::map<std::string,GLuint>           program_store_;
 };
 
 }
