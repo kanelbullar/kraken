@@ -7,6 +7,7 @@ namespace kraken {
    void pipeline::init() {
 
       glClearColor(0.2,0.2,0.2,1.0);
+      glEnable(GL_MULTISAMPLE_ARB);
 
       std::array<std::string,3> shader_stages = {{"pass",
                                                  "hedgehog",
