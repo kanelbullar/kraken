@@ -1,7 +1,7 @@
 #version 330
 
 layout(points) in;
-layout(triangle_strip,max_vertices=100) out;
+layout(triangle_strip,max_vertices=18) out;
 
 uniform mat4 projection;
 uniform mat4 view;
