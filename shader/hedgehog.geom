@@ -29,9 +29,9 @@ vec3 orthogonal(vec3 n) {
 
 void main() {
 
-   vec3 n = vec3(0.0,1.0,0.0);
-   vec3 u = orthogonal(n);
-   vec3 v = cross(n,u);
+   vec3 n = normalize(vec3(1.0,0.0,0.0));
+   vec3 u = normalize(orthogonal(n));
+   vec3 v = normalize(cross(n,u));
 
    vec3 points[5], normals[5];
 
@@ -48,17 +48,17 @@ void main() {
    normals[4] = normalize(cross(points[4]-points[1],points[2]-points[1]));
 
    // 012 Front
-   gl_Position = projection * view * vec4(points[2],1.0);
-   normal = normals[0];
-   light = normalize(lightpos - points[2]);
-   EmitVertex();
-   gl_Position = projection * view * vec4(points[3],1.0);
-   normal = normals[0];
-   light = normalize(lightpos - points[3]);
-   EmitVertex();
    gl_Position = projection * view * vec4(points[0],1.0);
    normal = normals[0];
    light = normalize(lightpos - points[0]);
+   EmitVertex();
+   gl_Position = projection * view * vec4(points[1],1.0);
+   normal = normals[0];
+   light = normalize(lightpos - points[1]);
+   EmitVertex();
+   gl_Position = projection * view * vec4(points[2],1.0);
+   normal = normals[0];
+   light = normalize(lightpos - points[2]);
    EmitVertex();
    EndPrimitive();
 

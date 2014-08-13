@@ -156,9 +156,10 @@ void gl_config::load_default() {
    GLint uniform_loc = glGetUniformLocation(program_id,"projection");
    glUniformMatrix4fv(uniform_loc,1,GL_FALSE,glm::value_ptr(perspective));
 
-   glm::mat4 view = glm::lookAt(glm::vec3(5.0f,0.0f,5.0f),
-                                glm::vec3(0.0f,0.0f,0.0f),
-                                glm::vec3(0.0f,1.0f,0.0f));
+   glm::mat4 view = glm::mat4(glm::vec4(1.0f,0.0f,0.0f,0.0f),
+                              glm::vec4(0.0f,1.0f,0.0f,0.0f),
+                              glm::vec4(0.0f,0.0f,1.0f,0.0f),
+                              glm::vec4(0.0f,0.0f,-15.0f,1.0f));
 
    uniform_loc = glGetUniformLocation(program_id,"view");
    glUniformMatrix4fv(uniform_loc,1,GL_FALSE,glm::value_ptr(view));
