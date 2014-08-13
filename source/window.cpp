@@ -17,7 +17,7 @@ namespace kraken {
       glutInitWindowPosition(0,0);
       glutInitWindowSize(res_[0],res_[1]);
 
-      glutInitDisplayMode(GLUT_RGBA | GLUT_DOUBLE | GLUT_DEPTH);
+      glutInitDisplayMode(GLUT_RGBA|GLUT_DOUBLE|GLUT_DEPTH|GLUT_MULTISAMPLE);
       glutInitContextVersion(3,3);
       glutInitContextFlags(GLUT_FORWARD_COMPATIBLE);
       glutInitContextProfile(GLUT_CORE_PROFILE);

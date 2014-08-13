@@ -162,6 +162,10 @@ namespace kraken {
 
       uniform_loc = glGetUniformLocation(program_id,"view");
       glUniformMatrix4fv(uniform_loc,1,GL_FALSE,glm::value_ptr(view));
+
+      glm::vec3 lightpos(0.0,0.0,5.0);
+      uniform_loc = glGetUniformLocation(program_id,"lightpos");
+      glUniform3fv(uniform_loc,1,glm::value_ptr(lightpos));
    }
 
 
