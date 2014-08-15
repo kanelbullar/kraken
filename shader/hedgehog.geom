@@ -7,9 +7,9 @@ uniform mat4 projection;
 uniform mat4 view;
 uniform vec3 lightpos;
 
+out vec3 triangle_color;
 out vec3 normal;
 out vec3 light;
-out vec3 color;
 
 vec3 orthogonal(vec3 n) {
 
@@ -31,7 +31,7 @@ vec3 orthogonal(vec3 n) {
 void main() {
 
 
-   vec3 n = normalize(vec3(0.0,0.0,-1.0));
+   vec3 n = normalize(vec3(0.7,-0.3,1.0));
    vec3 u = normalize(orthogonal(n));
    vec3 v = normalize(cross(n,u));
 
@@ -49,21 +49,21 @@ void main() {
    normals[3] = normalize(cross(points[4]-points[0],points[1]-points[0]));
    normals[4] = normalize(cross(points[4]-points[1],points[2]-points[1]));
 
-   /*// 012 Front
+   // 012 Front
    gl_Position = projection * view * vec4(points[0],1.0);
    normal = normals[0];
    light = normalize(lightpos - points[0]);
-   color = vec3(1.0,0.0,0.0);
+   triangle_color = vec3(1.0,0.0,0.0);
    EmitVertex();
    gl_Position = projection * view * vec4(points[1],1.0);
    normal = normals[0];
    light = normalize(lightpos - points[1]);
-   color = vec3(1.0,0.0,0.0);
+   triangle_color = vec3(1.0,0.0,0.0);
    EmitVertex();
    gl_Position = projection * view * vec4(points[2],1.0);
    normal = normals[0];
    light = normalize(lightpos - points[2]);
-   color = vec3(1.0,0.0,0.0);
+   triangle_color = vec3(1.0,0.0,0.0);
    EmitVertex();
    EndPrimitive();
 
@@ -71,53 +71,53 @@ void main() {
    gl_Position = projection * view * vec4(points[2],1.0);
    normal = normals[1];
    light = normalize(lightpos - points[2]);
-   color = vec3(0.0,0.0,1.0);
+   triangle_color = vec3(0.0,0.0,1.0);
    EmitVertex();
    gl_Position = projection * view * vec4(points[3],1.0);
    normal = normals[1];
    light = normalize(lightpos - points[3]);
-   color = vec3(0.0,0.0,1.0);
+   triangle_color = vec3(0.0,0.0,1.0);
    EmitVertex();
    gl_Position = projection * view * vec4(points[0],1.0);
    normal = normals[1];
    light = normalize(lightpos - points[0]);
-   color = vec3(0.0,0.0,1.0);
+   triangle_color = vec3(0.0,0.0,1.0);
    EmitVertex();
-   EndPrimitive();*/
+   EndPrimitive();
 
    // 304 Back
    gl_Position = projection * view * vec4(points[3],1.0);
    normal = normals[2];
    light = normalize(lightpos - points[3]);
-   color = vec3(0.0,1.0,0.0);
+   triangle_color = vec3(0.0,1.0,0.0);
    EmitVertex();
    gl_Position = projection * view * vec4(points[0],1.0);
    normal = normals[2];
    light = normalize(lightpos - points[0]);
-   color = vec3(0.0,1.0,0.0);
+   triangle_color = vec3(0.0,1.0,0.0);
    EmitVertex();
    gl_Position = projection * view * vec4(points[4],1.0);
    normal = normals[2];
    light = normalize(lightpos - points[4]);
-   color = vec3(0.0,1.0,0.0);
+   triangle_color = vec3(0.0,1.0,0.0);
    EmitVertex();
    EndPrimitive();
 
-   /*// 041 Left
+   // 041 Left
    gl_Position = projection * view * vec4(points[0],1.0);
    normal = normals[3];
    light = normalize(lightpos - points[0]);
-   color = vec3(0.0,1.0,1.0);
+   triangle_color = vec3(0.0,1.0,1.0);
    EmitVertex();
    gl_Position = projection * view * vec4(points[4],1.0);
    normal = normals[3];
    light = normalize(lightpos - points[4]);
-   color = vec3(0.0,1.0,1.0);
+   triangle_color = vec3(0.0,1.0,1.0);
    EmitVertex();
    gl_Position = projection * view * vec4(points[1],1.0);
    normal = normals[3];
    light = normalize(lightpos - points[1]);
-   color = vec3(0.0,1.0,1.0);
+   triangle_color = vec3(0.0,1.0,1.0);
    EmitVertex();
    EndPrimitive();
 
@@ -125,17 +125,17 @@ void main() {
    gl_Position = projection * view * vec4(points[4],1.0);
    normal = normals[4];
    light = normalize(lightpos - points[4]);
-   color = vec3(1.0,0.0,1.0);
+   triangle_color = vec3(1.0,0.0,1.0);
    EmitVertex();
    gl_Position = projection * view * vec4(points[1],1.0);
    normal = normals[4];
    light = normalize(lightpos - points[1]);
-   color = vec3(1.0,0.0,1.0);
+   triangle_color = vec3(1.0,0.0,1.0);
    EmitVertex();
    gl_Position = projection * view * vec4(points[3],1.0);
    normal = normals[4];
    light = normalize(lightpos - points[3]);
-   color = vec3(1.0,0.0,1.0);
+   triangle_color = vec3(1.0,0.0,1.0);
    EmitVertex();
    EndPrimitive();
 
@@ -143,17 +143,17 @@ void main() {
    gl_Position = projection * view * vec4(points[1],1.0);
    normal = normals[4];
    light = normalize(lightpos - points[1]);
-   color = vec3(1.0,1.0,0.0);
+   triangle_color = vec3(1.0,1.0,0.0);
    EmitVertex();
    gl_Position = projection * view * vec4(points[2],1.0);
    normal = normals[4];
    light = normalize(lightpos - points[2]);
-   color = vec3(1.0,1.0,0.0);
+   triangle_color = vec3(1.0,1.0,0.0);
    EmitVertex();
    gl_Position = projection * view * vec4(points[3],1.0);
    normal = normals[4];
    light = normalize(lightpos - points[3]);
-   color = vec3(1.0,1.0,0.0);
+   triangle_color = vec3(1.0,1.0,0.0);
    EmitVertex();
-   EndPrimitive();*/
+   EndPrimitive();
 }

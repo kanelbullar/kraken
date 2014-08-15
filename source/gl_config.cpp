@@ -132,7 +132,11 @@ void gl_config::reload_shader() const {
 
 void gl_config::load_default() {
 
-   GLfloat pos[] = {0.0,0.0,0.0};
+   GLfloat pos[] = {0.0,0.0,0.0,
+                    -8.0,10.0,-5.0,
+                    9.0,-7.0,-3.0,
+                    2.0,-14.0,-3.0,
+                    -12.0,4.0,-10.0};
 
    GLuint vbo,vao;
 
@@ -159,7 +163,7 @@ void gl_config::load_default() {
    glm::mat4 view = glm::mat4(glm::vec4(1.0f,0.0f,0.0f,0.0f),
                               glm::vec4(0.0f,1.0f,0.0f,0.0f),
                               glm::vec4(0.0f,0.0f,1.0f,0.0f),
-                              glm::vec4(0.0f,0.0f,-15.0f,1.0f));
+                              glm::vec4(0.0f,0.0f,-50.0f,1.0f));
 
    uniform_loc = glGetUniformLocation(program_id,"view");
    glUniformMatrix4fv(uniform_loc,1,GL_FALSE,glm::value_ptr(view));

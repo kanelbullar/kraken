@@ -8,6 +8,7 @@ namespace kraken {
 
       glClearColor(0.2,0.2,0.2,1.0);
       glEnable(GL_MULTISAMPLE_ARB);
+      glEnable(GL_DEPTH_TEST);
 
       std::array<std::string,3> shader_stages = {{"pass",
                                                  "hedgehog",
@@ -25,7 +26,7 @@ namespace kraken {
    void pipeline::display() {
 
       glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-      glDrawArrays(GL_POINTS,0,1);
+      glDrawArrays(GL_POINTS,0,5);
       glutSwapBuffers();
       glutPostRedisplay();
 
