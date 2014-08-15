@@ -8,6 +8,10 @@ namespace kraken {
    handle_(-1)
    {}
 
+   window::~window(){
+      
+   }
+
 
    void window::
 
@@ -22,8 +26,8 @@ namespace kraken {
       glutInitContextFlags(GLUT_FORWARD_COMPATIBLE);
       glutInitContextProfile(GLUT_CORE_PROFILE);
 
-      glutSetOption(GLUT_ACTION_ON_WINDOW_CLOSE,
-                    GLUT_ACTION_GLUTMAINLOOP_RETURNS);
+      /*glutSetOption(GLUT_ACTION_ON_WINDOW_CLOSE,
+                    GLUT_ACTION_GLUTMAINLOOP_RETURNS);*/
 
       handle_ = glutCreateWindow(title_.c_str());
 
