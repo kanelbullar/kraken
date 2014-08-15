@@ -14,6 +14,7 @@ class window {
    public:
 
    window(unsigned short,unsigned short);
+   ~window();
 
    void open(int,char**);
 

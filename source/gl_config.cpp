@@ -222,6 +222,8 @@ char* gl_config::load_shader(std::string const& name,GLenum type) const {
    }
 
    input.close();
+   
+   std::cout<<buffer;
 
    return buffer;
 } 

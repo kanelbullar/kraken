@@ -2,9 +2,17 @@
 
 #include <iostream>
 
+//FIX
+#include <pthread.h>
+
 namespace kraken {
 
    void pipeline::init() {
+      //FIX
+      int i;
+      i = pthread_getconcurrency();
+      ++i;
+      //<-
 
       glClearColor(0.2,0.2,0.2,1.0);
       glEnable(GL_MULTISAMPLE_ARB);
