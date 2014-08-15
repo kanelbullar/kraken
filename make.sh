@@ -1,5 +1,4 @@
-clang main.cpp\
-   source/config.cpp\
+g++ main.cpp\
    source/exception.cpp\
    source/gl_config.cpp\
    source/vector_field.cpp\
@@ -9,4 +8,6 @@ clang main.cpp\
    source/window.cpp\
    -omain -std=c++11 -Wall -pedantic\
    -Iinclude\
-   -lGL -lGLEW -lglut -lm -lstdc++
+   -lGLEW -lglut\
+   -L /usr/lib/nvidia-331\
+   -lGL

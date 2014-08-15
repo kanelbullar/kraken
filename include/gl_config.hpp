@@ -40,7 +40,7 @@ class gl_config {
 
    void clean(GLuint) const;
 
-   char* load_shader(std::string const&,GLenum type) const;
+   std::string const load_shader(std::string const&,GLenum type) const;
 
    void  compile_feedback(std::string const&) const;
    void  link_feedback(std::string const&) const;

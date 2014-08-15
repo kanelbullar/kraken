@@ -39,7 +39,7 @@ void gl_config::add_shader(std::string const& name,GLenum type) {
 
    if(!valid_stage(type)) throw(exception("invalid shader type"));
 
-   const char * shader_source(load_shader(name,type));
+   const char * shader_source = load_shader(name,type).c_str();
 
    GLuint shader_id(glCreateShader(type));
 
@@ -114,7 +114,7 @@ void gl_config::reload_shader() const {
       }
    }*/
 
-   for(auto stage  = shader_store_.begin() ; 
+   /*for(auto stage  = shader_store_.begin() ; 
             stage != shader_store_.end()   ; ++stage) {
 
       const char * shader_source(load_shader(stage->first,stage->second.type_));
@@ -126,7 +126,7 @@ void gl_config::reload_shader() const {
       compile_feedback(stage->first);
    }
 
-   std::cout << std::endl << "reloaded all shader" << std::endl;
+   std::cout << std::endl << "reloaded all shader" << std::endl;*/
 }
 
 
@@ -193,9 +193,9 @@ bool gl_config::valid_stage(GLenum type) const {
 }
 
 
-char* gl_config::load_shader(std::string const& name,GLenum type) const {
+std::string const gl_config::load_shader(std::string const& name,GLenum type) const {
 
-   std::string path(shader_path_);
+   std::string path(shader_path_) , buffer;
 
    if(path.back() != '/') path.append("/");
 
@@ -206,22 +206,14 @@ char* gl_config::load_shader(std::string const& name,GLenum type) const {
 
    if(!input) throw exception("shader file : " + path + " doesn't exist");
 
-   int size(0),index(0);
-   char* buffer(nullptr);
-
-   input.seekg(0,input.end);
-   size = input.tellg();
-   input.seekg(0,input.beg);
-
-   buffer = new char[size];
-
    while(input.good()) {
 
-      buffer[index] = input.get();
-      ++index;
+      buffer.push_back(input.get());
    }
 
    input.close();
+
+   buffer.pop_back();
 
    return buffer;
 } 

@@ -29,7 +29,7 @@ vec3 orthogonal(vec3 n) {
 
 void main() {
 
-   vec3 n = normalize(vec3(1.0,0.0,0.0));
+   vec3 n = normalize(vec3(0.0,1.0,-1.0));
    vec3 u = normalize(orthogonal(n));
    vec3 v = normalize(cross(n,u));
 
