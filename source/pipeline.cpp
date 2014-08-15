@@ -11,7 +11,7 @@ namespace kraken {
       glEnable(GL_DEPTH_TEST);
 
       std::array<std::string,3> shader_stages = {{"pass",
-                                                 "hedgehog",
+                                                 "cone",
                                                  "white"}};
 
       config_.add_shader(shader_stages[0],GL_VERTEX_SHADER);

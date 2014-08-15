@@ -163,7 +163,7 @@ void gl_config::load_default() {
    glm::mat4 view = glm::mat4(glm::vec4(1.0f,0.0f,0.0f,0.0f),
                               glm::vec4(0.0f,1.0f,0.0f,0.0f),
                               glm::vec4(0.0f,0.0f,1.0f,0.0f),
-                              glm::vec4(0.0f,0.0f,-50.0f,1.0f));
+                              glm::vec4(0.0f,0.0f,-10.0f,1.0f));
 
    uniform_loc = glGetUniformLocation(program_id,"view");
    glUniformMatrix4fv(uniform_loc,1,GL_FALSE,glm::value_ptr(view));
