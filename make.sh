@@ -9,5 +9,5 @@ g++ main.cpp\
    -omain -std=c++11 -Wall -pedantic\
    -Iinclude\
    -lGLEW -lglut\
-   -L /usr/lib/nvidia-331\
+   -L/usr/lib/nvidia-331\
    -lGL

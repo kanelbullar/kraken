@@ -49,8 +49,8 @@ void main() {
 
       position += cos(rad+rad_increment) * u + sin(rad+rad_increment) * v;
       position_mantle[0] = position;
-      normal = position - gl_in[0].gl_Position.xyz;
-      light = position - lightpos;
+      normal = normalize(position - gl_in[0].gl_Position.xyz);
+      light = normalize(position - lightpos);
       light_mantle[0] = light;
       gl_Position = projection * view * vec4(position,1.0);
       EmitVertex();
@@ -58,15 +58,15 @@ void main() {
       position = gl_in[0].gl_Position.xyz;
       position += cos(rad) * u + sin(rad) * v;
       position_mantle[1] = position;
-      normal = position - gl_in[0].gl_Position.xyz;
-      light = position - lightpos;
+      normal = normalize(position - gl_in[0].gl_Position.xyz);
+      light = normalize(position - lightpos);
       light_mantle[1] = light;
       gl_Position = projection * view * vec4(position,1.0);
       EmitVertex();
 
       position = gl_in[0].gl_Position.xyz + n;
-      normal = position - gl_in[0].gl_Position.xyz;
-      light = position - lightpos;
+      normal = normalize(position - gl_in[0].gl_Position.xyz);
+      light = normalize(position - lightpos);
       gl_Position = projection * view * vec4(position,1.0);
       EmitVertex();
       EndPrimitive();
