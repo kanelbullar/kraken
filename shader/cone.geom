@@ -49,11 +49,9 @@ void main() {
    t_pos[1] = (t_pos[1] + dim[1] / 2) / dim[1];
    t_pos[2] = (t_pos[2] + dim[2] / 2) / dim[2];
 
-   vec3 n = texture(vf,t_pos).rgb;
+   vec3 n = normalize(texture(vf,t_pos).rgb);
 
-   if(length(n) == 0) {
-      n = normalize(vec3(-1.0,0.0,0.0));
-   }
+   p_pos -= n/2;
 
    vec3 u = normalize(orthogonal(n)) * RADIUS,
         v = normalize(cross(n,u))    * RADIUS;   
