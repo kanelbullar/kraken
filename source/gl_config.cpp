@@ -10,6 +10,7 @@
 #include <iostream>
 
 #include <exception.hpp>
+#include <particle_emitter.hpp>
 
 namespace kraken {
 
@@ -132,11 +133,14 @@ void gl_config::reload_shader() const {
 
 void gl_config::load_default(vector_field const& vf) {
 
-   GLfloat pos[] = {  0.0,   0.0,   -4.0,
+   particle_emitter emitter;
+   
+   particles pos(emitter.raster(100,vf.dim_));
+   /*GLfloat pos[] = {  0.0,   0.0,   -4.0,
                      -8.0,  10.0,  -5.0,
                       9.0,  -7.0,  -5.0,
                       2.0,  -9.0,  -5.0,
-                     -8.0,   4.0, -5.0};
+                     -8.0,   4.0, -5.0};*/
 
    GLuint vbo,vao;
 
@@ -144,7 +148,7 @@ void gl_config::load_default(vector_field const& vf) {
    glGenVertexArrays(1,&vao);
 
    glBindBuffer(GL_ARRAY_BUFFER,vbo);
-   glBufferData(GL_ARRAY_BUFFER,sizeof(pos),pos,GL_STATIC_DRAW);
+   glBufferData(GL_ARRAY_BUFFER,pos.size_,pos.data_,GL_STATIC_DRAW);
    glBindVertexArray(vao);
 
    GLuint program_id(program_store_.find("triangle")->second);

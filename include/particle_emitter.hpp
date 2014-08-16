@@ -4,29 +4,41 @@
 #include <vector>
 #include <array>
 #include <random>
+#include <iostream>
 
 namespace kraken {
+
+struct particles {
+
+   inline particles(unsigned size, void* data):size_(size),data_(data){}
+   inline ~particles() {
+      float* data_ptr = reinterpret_cast<float*> (data_);
+      delete [] data_ptr;
+   }
+   
+   unsigned size_;
+   void* data_;
+   
+};
 
 typedef unsigned short ui16;
 typedef std::array<ui16,3> vec3;
 typedef std::array<float,3> pos3;
 
-enum distribution_type {RASTER,GAUSS,RANDOM};
-
 class particle_emitter {
 
    public:
 
-   particle_emitter(distribution_type, int, vec3);
+   particle_emitter();
    ~particle_emitter();
+
+   particles const raster(int, vec3 const&) const;
+   particles const gauss(int, vec3 const&)  const;
+   particles const random(int, vec3 const&) const;
 
    private:
 
-   void raster(int, vec3);
-   void gauss(int, vec3);
-   void random(int, vec3);
-
-   std::vector<pos3> particles_;
+   particles const convert(std::vector<pos3> const&) const;
 
 };
 

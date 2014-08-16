@@ -6,6 +6,7 @@ g++ main.cpp\
    source/pipeline.cpp\
    source/progress.cpp\
    source/window.cpp\
+   source/particle_emitter.cpp\
    -omain -std=c++11 -Wall -pedantic\
    -Iinclude\
    -lGLEW -lglut\
