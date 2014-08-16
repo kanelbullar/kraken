@@ -28,7 +28,7 @@ namespace kraken {
    void pipeline::display() {
 
       glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-      glDrawArrays(GL_POINTS,0,800000);
+      glDrawArrays(GL_POINTS,0,160000);
       glutSwapBuffers();
       glutPostRedisplay();
 

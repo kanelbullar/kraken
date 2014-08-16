@@ -135,7 +135,7 @@ void gl_config::load_default(vector_field const& vf) {
 
    particle_emitter emitter;
    
-   particles pos(emitter.raster(100,vf.dim_));
+   particles pos(emitter.raster(20,vf.dim_));
    /*GLfloat pos[] = {  0.0,   0.0,   -4.0,
                      -8.0,  10.0,  -5.0,
                       9.0,  -7.0,  -5.0,
@@ -169,22 +169,15 @@ void gl_config::load_default(vector_field const& vf) {
                               glm::vec4(0.0f,0.0f,1.0f,0.0f),
                               glm::vec4(0.0f,0.0f,-25.0f,1.0f));
 
-   std::cout << "dim 0 : " << vf.dim_[0] << std::endl;
-   std::cout <<  "dim 1 : " << vf.dim_[1] << std::endl;
-   std::cout << "dim 2 : " << vf.dim_[2] << std::endl;
-
    uniform_loc = glGetUniformLocation(program_id,"view");
-   std::cout<<"viewpos: "<<uniform_loc<<std::endl;
    glUniformMatrix4fv(uniform_loc,1,GL_FALSE,glm::value_ptr(view));
 
    glm::vec3 lightpos(0.0,0.0,5.0);
    uniform_loc = glGetUniformLocation(program_id,"lightpos");
-   std::cout<<"lightpos: "<<uniform_loc<<std::endl;
    glUniform3fv(uniform_loc,1,glm::value_ptr(lightpos));
 
    glm::ivec3 dim(vf.dim_[0],vf.dim_[1],vf.dim_[2]);
    uniform_loc = glGetUniformLocation(program_id,"dim");
-   std::cout<<"dim: "<<uniform_loc<<std::endl;
    glUniform3iv(uniform_loc,1,glm::value_ptr(dim));
 
    GLuint tex_id;
