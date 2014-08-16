@@ -10,6 +10,8 @@ namespace kraken {
       glEnable(GL_MULTISAMPLE_ARB);
       glEnable(GL_DEPTH_TEST);
 
+      //glViewport(0,0,1000,800);
+
       std::array<std::string,3> shader_stages = {{"pass",
                                                  "cone",
                                                  "white"}};
