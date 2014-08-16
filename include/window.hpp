@@ -6,6 +6,7 @@
 
 #include <exception.hpp>
 #include <pipeline.hpp>
+#include <vector_field.hpp>
 
 namespace kraken {
 
@@ -16,7 +17,7 @@ class window {
    window(unsigned short,unsigned short);
    ~window();
 
-   void open(int,char**);
+   void open(int,char**,vector_field const&);
 
    private:
 

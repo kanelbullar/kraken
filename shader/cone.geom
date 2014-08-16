@@ -6,6 +6,8 @@ layout(triangle_strip,max_vertices = 102) out;
 uniform mat4 projection;
 uniform mat4 view;
 uniform vec3 lightpos;
+uniform ivec3 dim;
+uniform sampler3D vf;
 
 out vec3 normal;
 out vec3 light;
@@ -38,13 +40,23 @@ void main() {
 
    mat4 perspective_view = projection * view;
 
-   // particle, vertex_position
+   // particle, vertex_position, texture_position
    vec3 p_pos = gl_in[0].gl_Position.xyz,
-        v_pos = vec3(0.0);
+        v_pos = vec3(0.0),
+        t_pos = p_pos;
+   
+   t_pos[0] = (t_pos[0] + dim[0] / 2) / dim[0];
+   t_pos[1] = (t_pos[1] + dim[1] / 2) / dim[1];
+   t_pos[2] = (t_pos[2] + dim[2] / 2) / dim[2];
 
-   vec3 n = normalize(vec3(-1.0,0.0,0.0)),
-        u = normalize(orthogonal(n)) * RADIUS,
-        v = normalize(cross(n,u))    * RADIUS;
+   vec3 n = texture(vf,t_pos).rgb;
+
+   if(length(n) == 0) {
+      n = normalize(vec3(-1.0,0.0,0.0));
+   }
+
+   vec3 u = normalize(orthogonal(n)) * RADIUS,
+        v = normalize(cross(n,u))    * RADIUS;   
 
    vec3 pos_mantle[2] , light_mantle[2];
 

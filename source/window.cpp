@@ -15,7 +15,7 @@ namespace kraken {
 
    void window::
 
-   open(int argc, char ** argv) {
+   open(int argc, char ** argv, vector_field const& vf) {
 
       glutInit(&argc,argv);
       glutInitWindowPosition(0,0);
@@ -36,7 +36,7 @@ namespace kraken {
 
       if(glew_init != GLEW_OK) throw exception("glew initialisation failed");
 
-      pipeline::init();
+      pipeline::init(vf);
       glutDisplayFunc(pipeline::display);
       glutTimerFunc(250,pipeline::time,0);
       glutKeyboardFunc(pipeline::key);

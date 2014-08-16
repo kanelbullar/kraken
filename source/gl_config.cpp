@@ -130,13 +130,13 @@ void gl_config::reload_shader() const {
 }
 
 
-void gl_config::load_default() {
+void gl_config::load_default(vector_field const& vf) {
 
-   GLfloat pos[] = {  0.0,   0.0,   0.0,
+   GLfloat pos[] = {  0.0,   0.0,   -4.0,
                      -8.0,  10.0,  -5.0,
-                      9.0,  -7.0,  -3.0,
-                      2.0, -14.0,  -3.0,
-                    -12.0,   4.0, -10.0};
+                      9.0,  -7.0,  -5.0,
+                      2.0,  -9.0,  -5.0,
+                     -8.0,   4.0, -5.0};
 
    GLuint vbo,vao;
 
@@ -165,12 +165,37 @@ void gl_config::load_default() {
                               glm::vec4(0.0f,0.0f,1.0f,0.0f),
                               glm::vec4(0.0f,0.0f,-25.0f,1.0f));
 
+   std::cout << "dim 0 : " << vf.dim_[0] << std::endl;
+   std::cout <<  "dim 1 : " << vf.dim_[1] << std::endl;
+   std::cout << "dim 2 : " << vf.dim_[2] << std::endl;
+
    uniform_loc = glGetUniformLocation(program_id,"view");
+   std::cout<<"viewpos: "<<uniform_loc<<std::endl;
    glUniformMatrix4fv(uniform_loc,1,GL_FALSE,glm::value_ptr(view));
 
    glm::vec3 lightpos(0.0,0.0,5.0);
    uniform_loc = glGetUniformLocation(program_id,"lightpos");
+   std::cout<<"lightpos: "<<uniform_loc<<std::endl;
    glUniform3fv(uniform_loc,1,glm::value_ptr(lightpos));
+
+   glm::ivec3 dim(vf.dim_[0],vf.dim_[1],vf.dim_[2]);
+   uniform_loc = glGetUniformLocation(program_id,"dim");
+   std::cout<<"dim: "<<uniform_loc<<std::endl;
+   glUniform3iv(uniform_loc,1,glm::value_ptr(dim));
+
+   GLuint tex_id;
+   glGenTextures(1, &tex_id);
+   glEnable(GL_TEXTURE_3D);
+   glActiveTexture(GL_TEXTURE0);
+   glBindTexture(GL_TEXTURE_3D, tex_id);
+   glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+   glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+   glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+   glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+   glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
+   glTexImage3D(GL_TEXTURE_3D, 0, GL_RGB, 
+                vf.dim_[0], vf.dim_[1], vf.dim_[2], 0, GL_RGB, 
+                GL_FLOAT, vf.data_);
 }
 
 

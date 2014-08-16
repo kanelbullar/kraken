@@ -4,7 +4,7 @@
 
 namespace kraken {
 
-   void pipeline::init() {
+   void pipeline::init(vector_field const& vf) {
 
       glClearColor(0.2,0.2,0.2,1.0);
       glEnable(GL_MULTISAMPLE_ARB);
@@ -22,7 +22,7 @@ namespace kraken {
       config_.add_program("triangle",shader_stages);
       config_.enable_program("triangle");
 
-      config_.load_default();
+      config_.load_default(vf);
    }
 
    void pipeline::display() {

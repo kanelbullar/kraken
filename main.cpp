@@ -8,13 +8,15 @@ int main(int argc, char** argv) {
    
    std::cout << "Release the kraken!" << std::endl;
 
-   /*kraken::vector_field field 
-   vectorfield(kraken::vector_field_generator::
-   random(std::array<unsigned short, 3>{{7,13,23}}));*/
+   kraken::vector_field_generator generator;
+
+   std::array<unsigned short,3> dim {20,20,20};
+
+   kraken::vector_field vf (generator.random(dim));
 
    kraken::window window(1000,800);
 
-   window.open(argc,argv);
+   window.open(argc,argv,vf);
 
    return 0;
 }

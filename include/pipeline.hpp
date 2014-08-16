@@ -2,6 +2,7 @@
 #define KRAKEN_PIPELINE
 
 #include <gl_config.hpp>
+#include <vector_field.hpp>
 
 namespace kraken {
 
@@ -9,7 +10,7 @@ class pipeline {
 
    public :
 
-   static void init();
+   static void init(vector_field const&);
    static void display();
    static void key(unsigned char,int,int);
    static void time(int);

@@ -9,6 +9,8 @@
 #include <GL/glew.h>
 #include <GL/freeglut.h>
 
+#include <vector_field.hpp>
+
 namespace kraken {
 
 struct shader_stage {
@@ -34,7 +36,7 @@ class gl_config {
 
    void reload_shader() const;
 
-   void load_default();
+   void load_default(vector_field const&);
 
    private :
 
