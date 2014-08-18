@@ -180,6 +180,10 @@ void gl_config::load_default(vector_field const& vf) {
    uniform_loc = glGetUniformLocation(program_id,"dim");
    glUniform3iv(uniform_loc,1,glm::value_ptr(dim));
 
+   glm::vec2 interval(vf.min_,vf.max_);
+   uniform_loc = glGetUniformLocation(program_id,"interval");
+   glUniform2fv(uniform_loc,1,glm::value_ptr(interval));
+
    GLuint tex_id;
    glGenTextures(1, &tex_id);
    glEnable(GL_TEXTURE_3D);

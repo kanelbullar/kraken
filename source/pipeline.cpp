@@ -14,7 +14,7 @@ namespace kraken {
 
       std::array<std::string,3> shader_stages = {{"pass",
                                                  "streamline",
-                                                 "white"}};
+                                                 "simple"}};
 
       config_.add_shader(shader_stages[0],GL_VERTEX_SHADER);
       config_.add_shader(shader_stages[1],GL_GEOMETRY_SHADER);

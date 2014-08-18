@@ -1,16 +1,30 @@
 #version 330
 
 layout(points) in;
-layout(triangle_strip,max_vertices = 102) out;
+layout(triangle_strip,max_vertices = 78) out;
 
 uniform mat4 projection;
 uniform mat4 view;
 uniform vec3 lightpos;
+uniform vec2 interval;
 uniform ivec3 dim;
 uniform sampler3D vf;
 
 out vec3 normal;
 out vec3 light;
+out vec3 color;
+
+vec3 transfer(float absolute) {
+   
+   vec3 c_min = vec3(0.3,0.0,0.0),
+        c_max = vec3(0.0,0.0,1.0);
+
+   float range = interval[1] - interval[0];
+
+   float weight = (absolute - interval[0]) / range;
+
+   return  (1.0 - weight) * c_min + weight * c_max;
+}
 
 // find any orthogonal vector
 vec3 orthogonal(vec3 n) {
@@ -35,7 +49,7 @@ void main() {
 
    const float PI_2     = 6.28318530718,
                RADIUS   = 0.2;
-   const int   SEGMENTS = 17;
+   const int   SEGMENTS = 13;
 
 
    mat4 perspective_view = projection * view;
@@ -49,7 +63,9 @@ void main() {
    t_pos[1] = (t_pos[1] + dim[1] / 2) / dim[1];
    t_pos[2] = (t_pos[2] + dim[2] / 2) / dim[2];
 
-   vec3 n = normalize(texture(vf,t_pos).rgb);
+   vec3 n = texture(vf,t_pos).rgb;
+   vec3 geom_color = transfer(length(n)); 
+   n = normalize(n);
 
    p_pos -= n/2;
 
@@ -66,6 +82,7 @@ void main() {
       v_pos  = p_pos + cos(rad) * u + sin(rad) * v;
       normal = normalize(v_pos - p_pos);
       light  = normalize(v_pos - lightpos);
+      color = geom_color;
       gl_Position = perspective_view * vec4(v_pos,1.0);
       EmitVertex();
       pos_mantle[0]   = v_pos;
@@ -74,6 +91,7 @@ void main() {
       v_pos   = p_pos + cos(rad+rad_increment) * u + sin(rad+rad_increment) * v;
       normal  = normalize(v_pos - p_pos);
       light   = normalize(v_pos - lightpos);
+      color = geom_color;
       gl_Position = perspective_view * vec4(v_pos,1.0);
       EmitVertex();
       pos_mantle[1]   = v_pos;
@@ -82,6 +100,7 @@ void main() {
       v_pos   = p_pos + n;
       normal  = normalize(v_pos - p_pos);
       light   = normalize(v_pos - lightpos);
+      color = geom_color;
       gl_Position = perspective_view * vec4(v_pos,1.0);
       EmitVertex();
       EndPrimitive();
@@ -91,16 +110,19 @@ void main() {
       // begin : base triangle
       normal = -n;
       light  = light_mantle[0];
+      color = geom_color;
       gl_Position = perspective_view * vec4(pos_mantle[0],1.0);
       EmitVertex();
 
       normal = -n;
       light = light_mantle[1];
+      color = geom_color;
       gl_Position = perspective_view * vec4(pos_mantle[1],1.0);
       EmitVertex();
 
       normal = -n;
       light  = p_pos - lightpos;
+      color = geom_color;
       gl_Position = perspective_view * vec4(p_pos,1.0);
       EmitVertex();
       EndPrimitive();

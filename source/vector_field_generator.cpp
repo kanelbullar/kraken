@@ -1,4 +1,5 @@
 #include <vector_field_generator.hpp>
+#include <cmath>
 
 namespace kraken {
 
@@ -10,20 +11,30 @@ namespace kraken {
       std::default_random_engine generator;
       std::uniform_real_distribution<float> distribution(-1,1);  
 
+      float min = 0.0, max = 0.0, absolute = 0.0;
       unsigned long size = dim[0]*dim[1]*dim[2];
 
       float* data = new float[size];
 
       progress status("RANDOM VECTOR FIELD",size);
       for(unsigned long index = 0 ; index < size ; ++index) {
-         data[index] = distribution(generator);
+         data[index]   = distribution(generator);
+         data[++index] = distribution(generator);
+         data[++index] = distribution(generator);
+         absolute = sqrt(pow(data[index]  ,2) + 
+                         pow(data[index-1],2) + 
+                         pow(data[index-2],2));
+
+         if     (absolute < min) min = absolute;
+         else if(absolute > max) max = absolute;
+
          status.update(index);
       }
       status.finalize();
 
       void* data_ptr = reinterpret_cast<void*> (data);
    
-      return vector_field(dim, data_ptr);
+      return vector_field(dim, data_ptr, min, max);
    }
 
    //ONE DIRECTION
@@ -60,7 +71,7 @@ namespace kraken {
 
       void* data_ptr = reinterpret_cast<void*> (data);
    
-      return vector_field(dim, data_ptr);
+      return vector_field(dim, data_ptr, 1, 1);
    }
 
    // TODO: SPHERE
@@ -68,7 +79,7 @@ namespace kraken {
 
    sphere(vec3 const& dim, vec3 const& center, sphere_type type) {
       
-      return vector_field(dim, nullptr);
+      return vector_field(dim, nullptr, 0, 0);
    }
 
 }

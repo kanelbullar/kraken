@@ -4,9 +4,12 @@ namespace kraken {
 
    vector_field::
    
-   vector_field(std::array<unsigned short,3> const& dim, void* data) :
+   vector_field(std::array<unsigned short,3> const& dim, void* data, 
+                float min, float max) :
    dim_(dim),
-   data_(data)   
+   data_(data),
+   min_(min),
+   max_(max)   
    {}
 
 
