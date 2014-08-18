@@ -8,12 +8,12 @@ namespace kraken {
    particles const particle_emitter::raster(int number, vec3 const& dim) const {   
       float number_f = static_cast<float>(number);     
 
-      std::vector<pos3> particle; 
+      std::vector<pos3> particle;
       
       for(float z = -(dim[2]/2); z < dim[2]/2; z+=dim[2]/number_f) {
          for(float y = -(dim[1]/2); y < dim[1]/2; y+=dim[1]/number_f) {
             for(float x = -(dim[0]/2); x < dim[0]/2; x+=dim[0]/number_f) {
-               //std::cout<<"x: "<<x<<", y:"<<y<<", z:"<<z<<std::endl;               
+              
                particle.push_back(pos3{x,y,z});
             }
          }
@@ -45,7 +45,7 @@ namespace kraken {
    }
 
    particles const particle_emitter::convert(std::vector<pos3> const& position) const {
-      unsigned size = sizeof(float)*position.size(), index = 0;     
+      unsigned size = position.size() * 3 , index = 0;     
       float* data = new float[size];      
       for(auto it = position.begin(); it != position.end(); ++it) {
 
@@ -55,6 +55,7 @@ namespace kraken {
          data[++index] = array[2];
          ++index;
       }
-      return particles(size,data);
+
+      return particles(size*sizeof(float),reinterpret_cast<void*>(data));
    }
 }

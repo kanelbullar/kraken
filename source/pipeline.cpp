@@ -13,8 +13,8 @@ namespace kraken {
       //glViewport(0,0,1000,800);
 
       std::array<std::string,3> shader_stages = {{"pass",
-                                                 "streamline",
-                                                 "simple"}};
+                                                  "streamline",
+                                                  "simple"}};
 
       config_.add_shader(shader_stages[0],GL_VERTEX_SHADER);
       config_.add_shader(shader_stages[1],GL_GEOMETRY_SHADER);
@@ -31,6 +31,12 @@ namespace kraken {
       glDrawArrays(GL_POINTS,0,160000);
       glutSwapBuffers();
       glutPostRedisplay();
+      
+      if(model_changed_) {
+
+         config_.load_model();
+         model_changed_ = false;
+      }
 
       ++frame_number_;
    }
@@ -45,6 +51,22 @@ namespace kraken {
          case 27  : glutLeaveMainLoop(); break;
 
          case 114 : config_.reload_shader(); break;
+
+      }
+   }
+
+
+   void pipeline::special(int key, int x, int y) {
+
+      switch(key) {
+         
+         case 100 : config_.rotate(false,false) ; model_changed_ = true ; break;
+
+         case 102 : config_.rotate(false,true)  ; model_changed_ = true ; break;
+
+         case 103 : config_.rotate(true,false)  ; model_changed_ = true ; break;
+
+         case 101 : config_.rotate(true,true)   ; model_changed_ = true ; break;
       }
    }
 
@@ -65,4 +87,5 @@ namespace kraken {
 
    gl_config pipeline::config_ = gl_config();
    unsigned short pipeline::frame_number_ = 0;
+   bool pipeline::model_changed_ = false;
 }

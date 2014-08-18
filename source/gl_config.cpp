@@ -1,7 +1,5 @@
 #include <gl_config.hpp>
 
-#define GLM_FORCE_RADIANS
-#include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
@@ -17,7 +15,9 @@ namespace kraken {
 gl_config::
    
 gl_config(std::string const& shader_path) :
-shader_path_(shader_path)
+shader_path_(shader_path),
+model_(glm::mat4()),
+rotation_(std::array<float,2>{{0.0,0.0}})
 {}
 
 
@@ -135,12 +135,7 @@ void gl_config::load_default(vector_field const& vf) {
 
    particle_emitter emitter;
    
-   particles pos(emitter.raster(20,vf.dim_));
-   /*GLfloat pos[] = {  0.0,   0.0,   -4.0,
-                     -8.0,  10.0,  -5.0,
-                      9.0,  -7.0,  -5.0,
-                      2.0,  -9.0,  -5.0,
-                     -8.0,   4.0, -5.0};*/
+   particles pos(emitter.raster(10,vf.dim_));
 
    GLuint vbo,vao;
 
@@ -156,7 +151,7 @@ void gl_config::load_default(vector_field const& vf) {
    GLint attr_pos(glGetAttribLocation(program_id,"pos"));
    
    glEnableVertexAttribArray(attr_pos);
-   glVertexAttribPointer(attr_pos,3,GL_FLOAT,GL_FALSE,0,0);
+   glVertexAttribPointer(attr_pos,3,GL_FLOAT,GL_FALSE,sizeof(float)*3,0);
 
    glm::mat4 perspective = 
    glm::perspective(45.0f,static_cast<float> (1000) / 800,0.1f,100.0f);
@@ -167,10 +162,13 @@ void gl_config::load_default(vector_field const& vf) {
    glm::mat4 view = glm::mat4(glm::vec4(1.0f,0.0f,0.0f,0.0f),
                               glm::vec4(0.0f,1.0f,0.0f,0.0f),
                               glm::vec4(0.0f,0.0f,1.0f,0.0f),
-                              glm::vec4(0.0f,0.0f,-25.0f,1.0f));
+                              glm::vec4(0.0f,0.0f,-50.0f,1.0f));
 
    uniform_loc = glGetUniformLocation(program_id,"view");
    glUniformMatrix4fv(uniform_loc,1,GL_FALSE,glm::value_ptr(view));
+
+   uniform_loc = glGetUniformLocation(program_id,"model");
+   glUniformMatrix4fv(uniform_loc,1,GL_FALSE,glm::value_ptr(model_));
 
    glm::vec3 lightpos(0.0,0.0,5.0);
    uniform_loc = glGetUniformLocation(program_id,"lightpos");
@@ -329,5 +327,39 @@ void gl_config::link_feedback(std::string const& program_name) const {
       delete[] info_buffer;
    }
 }
+
+
+void gl_config::rotate(bool axis,bool dir) {
+
+   // x-axis left
+   if     (axis &&  dir) rotation_[0] -= 0.02;
+
+   // x-axis right
+   else if(axis &&  !dir) rotation_[0] += 0.02;
+
+  // y-axis left
+   else if(!axis && !dir) rotation_[1] -= 0.02;
+
+   // y-axis right
+   else if(!axis && dir) rotation_[1] += 0.02;
+
+
+   glm::mat4 rx = glm::rotate(glm::mat4(),rotation_[0],glm::vec3(1.0,0.0,0.0)),
+             ry = glm::rotate(glm::mat4(),rotation_[1],glm::vec3(0.0,1.0,0.0));
+
+   model_ = rx * ry;
+}
+
+
+void gl_config::load_model() {
+
+   for(auto program  = program_store_.begin() ;
+            program != program_store_.end()   ; ++program) {
+
+      GLint uniform_loc = glGetUniformLocation(program->second,"model");
+      glUniformMatrix4fv(uniform_loc,1,GL_FALSE,glm::value_ptr(model_));
+   }
+}
+
 
 }

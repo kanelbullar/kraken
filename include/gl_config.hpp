@@ -9,6 +9,9 @@
 #include <GL/glew.h>
 #include <GL/freeglut.h>
 
+#define GLM_FORCE_RADIANS
+#include <glm/glm.hpp>
+
 #include <vector_field.hpp>
 
 namespace kraken {
@@ -38,6 +41,9 @@ class gl_config {
 
    void load_default(vector_field const&);
 
+   void rotate(bool,bool);
+   void load_model();
+
    private :
 
    void clean(GLuint) const;
@@ -56,6 +62,10 @@ class gl_config {
    std::map<std::string,shader_stage>     shader_store_;
    std::map<GLuint,std::array<GLuint,3> > link_;
    std::map<std::string,GLuint>           program_store_;
+
+   glm::mat4 model_;
+
+   std::array<float,2> rotation_;
 };
 
 }

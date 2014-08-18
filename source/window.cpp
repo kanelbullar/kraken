@@ -40,6 +40,7 @@ namespace kraken {
       glutDisplayFunc(pipeline::display);
       glutTimerFunc(250,pipeline::time,0);
       glutKeyboardFunc(pipeline::key);
+      glutSpecialFunc(pipeline::special);
 
       glutMainLoop();
    }

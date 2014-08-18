@@ -12,7 +12,7 @@ namespace kraken {
       std::uniform_real_distribution<float> distribution(-1,1);  
 
       float min = 0.0, max = 0.0, absolute = 0.0;
-      unsigned long size = dim[0]*dim[1]*dim[2];
+      unsigned long size = dim[0]*dim[1]*dim[2]*3;
 
       float* data = new float[size];
 
@@ -42,7 +42,7 @@ namespace kraken {
 
    one_direction(vec3 const& dim, direction_type type) {  
 
-      unsigned long size = dim[0]*dim[1]*dim[2];
+      unsigned long size = dim[0]*dim[1]*dim[2]*3;
 
       float* data = new float[size];
 
@@ -71,7 +71,7 @@ namespace kraken {
 
       void* data_ptr = reinterpret_cast<void*> (data);
    
-      return vector_field(dim, data_ptr, 1, 1);
+      return vector_field(dim, data_ptr, 0, 1);
    }
 
    // TODO: SPHERE
