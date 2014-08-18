@@ -44,6 +44,8 @@ class gl_config {
    void rotate(bool,bool);
    void load_model();
 
+   unsigned particle_number() const;
+
    private :
 
    void clean(GLuint) const;
@@ -66,6 +68,8 @@ class gl_config {
    glm::mat4 model_;
 
    std::array<float,2> rotation_;
+
+   unsigned particle_number_;
 };
 
 }

@@ -46,6 +46,7 @@ void main () {
       t_pos[2] = (t_pos[2] + dim[2] / 2) / dim[2];
 
       vec3 n = texture(vf,t_pos).rgb;
+      if(length(n) == 0) break;
       vec3 geom_color = transfer(length(n));
       n = normalize(n);
 

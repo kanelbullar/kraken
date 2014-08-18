@@ -65,70 +65,73 @@ void main() {
    t_pos[2] = (t_pos[2] + dim[2] / 2) / dim[2];
 
    vec3 n = texture(vf,t_pos).rgb;
-   vec3 geom_color = transfer(length(n)); 
-   n = normalize(n);
 
-   p_pos -= n/2;
+   if(length(n) != 0.0) {
 
-   vec3 u = normalize(orthogonal(n)) * RADIUS,
-        v = normalize(cross(n,u))    * RADIUS;   
+      vec3 geom_color = transfer(length(n)); 
+      n = normalize(n);
 
-   vec3 pos_mantle[2] , light_mantle[2];
+      p_pos -= n/2;
 
-   float rad_increment = PI_2 / SEGMENTS;
+      vec3 u = normalize(orthogonal(n)) * RADIUS,
+           v = normalize(cross(n,u))    * RADIUS;   
 
-   for(float rad = 0.0 ; rad < PI_2 ; rad += rad_increment) {
+      vec3 pos_mantle[2] , light_mantle[2];
 
-      // begin : mantle triangle
-      v_pos  = p_pos + cos(rad) * u + sin(rad) * v;
-      normal = normalize(v_pos - p_pos);
-      light  = normalize(v_pos - lightpos);
-      color = geom_color;
-      gl_Position = perspective_view * vec4(v_pos,1.0);
-      EmitVertex();
-      pos_mantle[0]   = v_pos;
-      light_mantle[0] = light;
+      float rad_increment = PI_2 / SEGMENTS;
+
+      for(float rad = 0.0 ; rad < PI_2 ; rad += rad_increment) {
+
+         // begin : mantle triangle
+         v_pos  = p_pos + cos(rad) * u + sin(rad) * v;
+         normal = normalize(v_pos - p_pos);
+         light  = normalize(v_pos - lightpos);
+         color = geom_color;
+         gl_Position = perspective_view * vec4(v_pos,1.0);
+         EmitVertex();
+         pos_mantle[0]   = v_pos;
+         light_mantle[0] = light;
       
-      v_pos   = p_pos + cos(rad+rad_increment) * u + sin(rad+rad_increment) * v;
-      normal  = normalize(v_pos - p_pos);
-      light   = normalize(v_pos - lightpos);
-      color = geom_color;
-      gl_Position = perspective_view * vec4(v_pos,1.0);
-      EmitVertex();
-      pos_mantle[1]   = v_pos;
-      light_mantle[1] = light;
+         v_pos   = p_pos + cos(rad+rad_increment) * u 
+                         + sin(rad+rad_increment) * v;
+         normal  = normalize(v_pos - p_pos);
+         light   = normalize(v_pos - lightpos);
+         color = geom_color;
+         gl_Position = perspective_view * vec4(v_pos,1.0);
+         EmitVertex();
+         pos_mantle[1]   = v_pos;
+         light_mantle[1] = light;
 
-      v_pos   = p_pos + n;
-      normal  = normalize(v_pos - p_pos);
-      light   = normalize(v_pos - lightpos);
-      color = geom_color;
-      gl_Position = perspective_view * vec4(v_pos,1.0);
-      EmitVertex();
-      EndPrimitive();
-      // end : mantle triangle
+         v_pos   = p_pos + n;
+         normal  = normalize(v_pos - p_pos);
+         light   = normalize(v_pos - lightpos);
+         color = geom_color;
+         gl_Position = perspective_view * vec4(v_pos,1.0);
+         EmitVertex();
+         EndPrimitive();
+         // end : mantle triangle
 
 
-      // begin : base triangle
-      normal = -n;
-      light  = light_mantle[0];
-      color = geom_color;
-      gl_Position = perspective_view * vec4(pos_mantle[0],1.0);
-      EmitVertex();
+         // begin : base triangle
+         normal = -n;
+         light  = light_mantle[0];
+         color = geom_color;
+         gl_Position = perspective_view * vec4(pos_mantle[0],1.0);
+         EmitVertex();
 
-      normal = -n;
-      light = light_mantle[1];
-      color = geom_color;
-      gl_Position = perspective_view * vec4(pos_mantle[1],1.0);
-      EmitVertex();
+         normal = -n;
+         light = light_mantle[1];
+         color = geom_color;
+         gl_Position = perspective_view * vec4(pos_mantle[1],1.0);
+         EmitVertex();
 
-      normal = -n;
-      light  = p_pos - lightpos;
-      color = geom_color;
-      gl_Position = perspective_view * vec4(p_pos,1.0);
-      EmitVertex();
-      EndPrimitive();
-      // end : base triangle
+         normal = -n;
+         light  = p_pos - lightpos;
+         color = geom_color;
+         gl_Position = perspective_view * vec4(p_pos,1.0);
+         EmitVertex();
+         EndPrimitive();
+         // end : base triangle
+      }
    }
-   
-
 }

@@ -17,7 +17,8 @@ gl_config::
 gl_config(std::string const& shader_path) :
 shader_path_(shader_path),
 model_(glm::mat4()),
-rotation_(std::array<float,2>{{0.0,0.0}})
+rotation_(std::array<float,2>{{0.0,0.0}}),
+particle_number_(0)
 {}
 
 
@@ -137,6 +138,8 @@ void gl_config::load_default(vector_field const& vf) {
    
    particles pos(emitter.raster(10,vf.dim_));
 
+   particle_number_ = pos.size_ / (3 * sizeof(float));
+
    GLuint vbo,vao;
 
    glGenBuffers(1,&vbo);
@@ -162,7 +165,7 @@ void gl_config::load_default(vector_field const& vf) {
    glm::mat4 view = glm::mat4(glm::vec4(1.0f,0.0f,0.0f,0.0f),
                               glm::vec4(0.0f,1.0f,0.0f,0.0f),
                               glm::vec4(0.0f,0.0f,1.0f,0.0f),
-                              glm::vec4(0.0f,0.0f,-50.0f,1.0f));
+                              glm::vec4(0.0f,0.0f,-30.0f,1.0f));
 
    uniform_loc = glGetUniformLocation(program_id,"view");
    glUniformMatrix4fv(uniform_loc,1,GL_FALSE,glm::value_ptr(view));
@@ -361,5 +364,10 @@ void gl_config::load_model() {
    }
 }
 
+
+unsigned gl_config::particle_number() const {
+
+   return particle_number_;
+}
 
 }
