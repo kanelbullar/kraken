@@ -46,7 +46,26 @@ namespace kraken {
 
          case 27  : glutLeaveMainLoop(); break;
 
+         case 43  : config_.zoom(true) ;  view_changed_ = true ; break;
+
+         case 45  : config_.zoom(false) ; view_changed_ = true ; break;
+
          case 114 : config_.reload_shader(); break;
+      }
+   }
+
+
+   void pipeline::special(int key, int x, int y) {
+
+      switch(key) {
+         
+         case 100 : config_.rotate(false,false) ; view_changed_ = true ; break;
+
+         case 102 : config_.rotate(false,true)  ; view_changed_ = true ; break;
+
+         case 103 : config_.rotate(true,false)  ; view_changed_ = true ; break;
+
+         case 101 : config_.rotate(true,true)   ; view_changed_ = true ; break;
       }
    }
 
@@ -60,22 +79,7 @@ namespace kraken {
 
       config_.aspect_ratio(res);
 
-      ratio_changed_ = true;
-   }
-
-
-   void pipeline::special(int key, int x, int y) {
-
-      switch(key) {
-         
-         case 100 : config_.rotate(false,false) ; model_changed_ = true ; break;
-
-         case 102 : config_.rotate(false,true)  ; model_changed_ = true ; break;
-
-         case 103 : config_.rotate(true,false)  ; model_changed_ = true ; break;
-
-         case 101 : config_.rotate(true,true)   ; model_changed_ = true ; break;
-      }
+      proj_changed_ = true;
    }
 
 
@@ -95,22 +99,26 @@ namespace kraken {
 
    void pipeline::update() {
 
-      if(model_changed_) {
+      if(view_changed_) {
 
          config_.load_model();
-         model_changed_ = false;
+         view_changed_ = false;
       }
 
-      if(ratio_changed_) {
+      if(proj_changed_) {
 
          config_.load_projection();
-         ratio_changed_ = false;
+         proj_changed_ = false;
       } 
    }
 
 
+   // initialize static member
+
    gl_config pipeline::config_ = gl_config();
+
    unsigned short pipeline::frame_number_ = 0;
-   bool pipeline::model_changed_ = false;
-   bool pipeline::ratio_changed_ = false;
+
+   bool pipeline::view_changed_ = false;
+   bool pipeline::proj_changed_ = false;
 }

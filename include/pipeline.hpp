@@ -24,8 +24,8 @@ class pipeline {
 
    static gl_config config_;
    static unsigned short frame_number_;
-   static bool model_changed_;
-   static bool ratio_changed_;
+
+   static bool view_changed_ , proj_changed_;
 };
 
 }

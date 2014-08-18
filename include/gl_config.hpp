@@ -42,6 +42,8 @@ class gl_config {
    void load_default(vector_field const&);
 
    void rotate(bool,bool);
+   void zoom(bool);
+
    void load_model();
    void load_projection();
 
@@ -68,13 +70,11 @@ class gl_config {
    std::map<GLuint,std::array<GLuint,3> > link_;
    std::map<std::string,GLuint>           program_store_;
 
-   glm::mat4 model_;
+   unsigned particle_number_;
 
    std::array<float,2> rotation_;
 
-   unsigned particle_number_;
-
-   float aspect_ratio_;
+   float aspect_ratio_ , depth_;
 };
 
 }

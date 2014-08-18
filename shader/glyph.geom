@@ -5,7 +5,6 @@ layout(triangle_strip,max_vertices = 78) out;
 
 uniform mat4 projection;
 uniform mat4 view;
-uniform mat4 model;
 uniform vec3 lightpos;
 uniform vec2 interval;
 uniform ivec3 dim;
@@ -53,7 +52,7 @@ void main() {
    const int   SEGMENTS = 13;
 
 
-   mat4 perspective_view = projection * view * model;
+   mat4 perspective_view = projection * view;
 
    // particle, vertex_position, texture_position
    vec3 p_pos = gl_in[0].gl_Position.xyz,

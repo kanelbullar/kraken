@@ -16,9 +16,9 @@ gl_config::
    
 gl_config(std::string const& shader_path) :
 shader_path_(shader_path),
-model_(glm::mat4()),
-rotation_(std::array<float,2>{{0.0,0.0}}),
-particle_number_(0)
+particle_number_(0),
+rotation_(std::array<float,2>{{0.0f,0.0f}}),
+depth_(-30.0f)
 {}
 
 
@@ -162,16 +162,12 @@ void gl_config::load_default(vector_field const& vf) {
    GLint uniform_loc = glGetUniformLocation(program_id,"projection");
    glUniformMatrix4fv(uniform_loc,1,GL_FALSE,glm::value_ptr(perspective));
 
-   glm::mat4 view = glm::mat4(glm::vec4(1.0f,0.0f,0.0f,0.0f),
-                              glm::vec4(0.0f,1.0f,0.0f,0.0f),
-                              glm::vec4(0.0f,0.0f,1.0f,0.0f),
-                              glm::vec4(0.0f,0.0f,-30.0f,1.0f));
+   glm::mat4 view;
+
+   view[3][2] = depth_;
 
    uniform_loc = glGetUniformLocation(program_id,"view");
    glUniformMatrix4fv(uniform_loc,1,GL_FALSE,glm::value_ptr(view));
-
-   uniform_loc = glGetUniformLocation(program_id,"model");
-   glUniformMatrix4fv(uniform_loc,1,GL_FALSE,glm::value_ptr(model_));
 
    glm::vec3 lightpos(0.0,0.0,5.0);
    uniform_loc = glGetUniformLocation(program_id,"lightpos");
@@ -345,22 +341,34 @@ void gl_config::rotate(bool axis,bool dir) {
 
    // y-axis right
    else if(!axis && dir) rotation_[1] += 0.02;
+}
 
 
-   glm::mat4 rx = glm::rotate(glm::mat4(),rotation_[0],glm::vec3(1.0,0.0,0.0)),
-             ry = glm::rotate(glm::mat4(),rotation_[1],glm::vec3(0.0,1.0,0.0));
+void gl_config::zoom(bool in) {
 
-   model_ = rx * ry;
+   float increment(0.5f);
+
+   // zoom out
+   if(!in) increment = -increment;
+
+   depth_ += increment;
 }
 
 
 void gl_config::load_model() {
 
+   glm::mat4 view(glm::rotate(glm::mat4(),rotation_[0],glm::vec3(1.0,0.0,0.0)));
+
+   view *= glm::rotate(glm::mat4(),rotation_[1],glm::vec3(0.0,1.0,0.0));
+
+   view[3][2] = depth_;
+
+
    for(auto program  = program_store_.begin() ;
             program != program_store_.end()   ; ++program) {
 
-      GLint uniform_loc = glGetUniformLocation(program->second,"model");
-      glUniformMatrix4fv(uniform_loc,1,GL_FALSE,glm::value_ptr(model_));
+      GLint uniform_loc = glGetUniformLocation(program->second,"view");
+      glUniformMatrix4fv(uniform_loc,1,GL_FALSE,glm::value_ptr(view));
    }
 }
 

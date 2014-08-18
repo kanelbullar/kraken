@@ -7,7 +7,6 @@ layout (line_strip,max_vertices = base_number) out;
 
 uniform mat4 projection;
 uniform mat4 view;
-uniform mat4 model;
 uniform ivec3 dim;
 uniform vec2 interval;
 uniform sampler3D vf;
@@ -32,7 +31,7 @@ vec3 transfer(float absolute) {
 void main () {
 
    const float step_width = 0.1;
-   mat4 perspective_view = projection * view * model;
+   mat4 perspective_view = projection * view;
 
    vec3 p_pos = gl_in[0].gl_Position.xyz,
         t_pos = p_pos;
