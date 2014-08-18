@@ -8,7 +8,7 @@ namespace kraken {
    random(vec3 const& dim) {
 
       std::default_random_engine generator;
-      std::uniform_real_distribution<float> distribution(0,1);  
+      std::uniform_real_distribution<float> distribution(-1,1);  
 
       unsigned long size = dim[0]*dim[1]*dim[2];
 
@@ -35,7 +35,7 @@ namespace kraken {
 
       float* data = new float[size];
 
-      int x(0), y(0), z(0);
+      float x(0), y(0), z(0);
 
       switch (type) {
          
