@@ -17,8 +17,8 @@ out vec3 color;
 
 vec3 transfer(float absolute) {
    
-   vec3 c_min = vec3(0.3,0.0,0.0),
-        c_max = vec3(0.0,0.0,1.0);
+   vec3 c_min = vec3(0.0,0.0,1.0),
+        c_max = vec3(1.0,0.0,0.0);
 
    float range = interval[1] - interval[0];
 

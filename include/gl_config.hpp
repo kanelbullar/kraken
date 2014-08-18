@@ -43,8 +43,11 @@ class gl_config {
 
    void rotate(bool,bool);
    void load_model();
+   void load_projection();
 
    unsigned particle_number() const;
+
+   void aspect_ratio(std::array<unsigned short,2> const&);
 
    private :
 
@@ -70,6 +73,8 @@ class gl_config {
    std::array<float,2> rotation_;
 
    unsigned particle_number_;
+
+   float aspect_ratio_;
 };
 
 }

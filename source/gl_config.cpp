@@ -157,7 +157,7 @@ void gl_config::load_default(vector_field const& vf) {
    glVertexAttribPointer(attr_pos,3,GL_FLOAT,GL_FALSE,sizeof(float)*3,0);
 
    glm::mat4 perspective = 
-   glm::perspective(45.0f,static_cast<float> (1000) / 800,0.1f,100.0f);
+   glm::perspective(45.0f,aspect_ratio_,0.1f,100.0f);
 
    GLint uniform_loc = glGetUniformLocation(program_id,"projection");
    glUniformMatrix4fv(uniform_loc,1,GL_FALSE,glm::value_ptr(perspective));
@@ -365,9 +365,30 @@ void gl_config::load_model() {
 }
 
 
+void gl_config::load_projection() {
+
+   for(auto program  = program_store_.begin() ;
+            program != program_store_.end()   ; ++program) {
+
+      glm::mat4 perspective = glm::perspective(45.0f,aspect_ratio_,0.1f,100.0f);
+
+      GLint uniform_loc = glGetUniformLocation(program->second,"projection");
+      glUniformMatrix4fv(uniform_loc,1,GL_FALSE,glm::value_ptr(perspective));
+   }
+}
+
+
 unsigned gl_config::particle_number() const {
 
    return particle_number_;
+}
+
+
+void gl_config::aspect_ratio(std::array<unsigned short,2> const& res) {
+
+   glViewport(0,0,res[0],res[1]);
+
+   aspect_ratio_ = static_cast<float> (res[0]) / res[1];
 }
 
 }

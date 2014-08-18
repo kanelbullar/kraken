@@ -4,13 +4,13 @@
 
 namespace kraken {
 
-   void pipeline::init(vector_field const& vf) {
+   void pipeline::
+
+   init(vector_field const& vf,std::array<unsigned short,2> const& res) {
 
       glClearColor(0.2,0.2,0.2,1.0);
       glEnable(GL_MULTISAMPLE_ARB);
       glEnable(GL_DEPTH_TEST);
-
-      //glViewport(0,0,1000,800);
 
       std::array<std::string,3> shader_stages = {{"pass",
                                                   "streamline",
@@ -22,6 +22,7 @@ namespace kraken {
       config_.add_program("triangle",shader_stages);
       config_.enable_program("triangle");
 
+      config_.aspect_ratio(res);
       config_.load_default(vf);
    }
 
@@ -31,12 +32,7 @@ namespace kraken {
       glDrawArrays(GL_POINTS,0,config_.particle_number());
       glutSwapBuffers();
       glutPostRedisplay();
-      
-      if(model_changed_) {
-
-         config_.load_model();
-         model_changed_ = false;
-      }
+      update();
 
       ++frame_number_;
    }
@@ -51,8 +47,20 @@ namespace kraken {
          case 27  : glutLeaveMainLoop(); break;
 
          case 114 : config_.reload_shader(); break;
-
       }
+   }
+
+
+   void pipeline::reshape(int width , int height) {
+
+      std::array<unsigned short,2> res;
+
+      res[0] = static_cast<unsigned short> (width);
+      res[1] = static_cast<unsigned short> (height);
+
+      config_.aspect_ratio(res);
+
+      ratio_changed_ = true;
    }
 
 
@@ -85,7 +93,24 @@ namespace kraken {
    }
 
 
+   void pipeline::update() {
+
+      if(model_changed_) {
+
+         config_.load_model();
+         model_changed_ = false;
+      }
+
+      if(ratio_changed_) {
+
+         config_.load_projection();
+         ratio_changed_ = false;
+      } 
+   }
+
+
    gl_config pipeline::config_ = gl_config();
    unsigned short pipeline::frame_number_ = 0;
    bool pipeline::model_changed_ = false;
+   bool pipeline::ratio_changed_ = false;
 }
