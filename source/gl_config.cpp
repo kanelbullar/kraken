@@ -184,6 +184,8 @@ void gl_config::load_default(vector_field const& vf) {
    uniform_loc = glGetUniformLocation(program_id,"interval");
    glUniform2fv(uniform_loc,1,glm::value_ptr(interval));
 
+   float border_color[] = {0.0f,0.0f,0.0f,1.0f};
+ 
    GLuint tex_id;
    glGenTextures(1, &tex_id);
    glEnable(GL_TEXTURE_3D);
@@ -191,9 +193,10 @@ void gl_config::load_default(vector_field const& vf) {
    glBindTexture(GL_TEXTURE_3D, tex_id);
    glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
    glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-   glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_WRAP_S, GL_CLAMP);
-   glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_WRAP_T, GL_CLAMP);
-   glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_WRAP_R, GL_CLAMP);
+   glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
+   glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
+   glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_BORDER);
+   glTexParameterfv(GL_TEXTURE_3D, GL_TEXTURE_BORDER_COLOR, border_color);
    glTexImage3D(GL_TEXTURE_3D, 0, GL_RGB32F, 
                 vf.dim_[0], vf.dim_[1], vf.dim_[2], 0, GL_RGB, 
                 GL_FLOAT, vf.data_);
