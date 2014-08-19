@@ -149,37 +149,40 @@ void gl_config::load_default(vector_field const& vf) {
    glBufferData(GL_ARRAY_BUFFER,pos.size_,pos.data_,GL_STATIC_DRAW);
    glBindVertexArray(vao);
 
-   GLuint program_id(program_store_.find("triangle")->second);
+   for(auto program  = program_store_.begin() ;
+            program != program_store_.end()   ; ++program) {
 
-   GLint attr_pos(glGetAttribLocation(program_id,"pos"));
+      GLuint program_id(program->second);
+
+      GLint attr_pos(glGetAttribLocation(program_id,"pos"));
    
-   glEnableVertexAttribArray(attr_pos);
-   glVertexAttribPointer(attr_pos,3,GL_FLOAT,GL_FALSE,sizeof(float)*3,0);
+      glEnableVertexAttribArray(attr_pos);
+      glVertexAttribPointer(attr_pos,3,GL_FLOAT,GL_FALSE,0,0);
 
-   glm::mat4 perspective = 
-   glm::perspective(45.0f,aspect_ratio_,0.1f,100.0f);
+      glm::mat4 perspective = glm::perspective(45.0f,aspect_ratio_,0.1f,100.0f);
 
-   GLint uniform_loc = glGetUniformLocation(program_id,"projection");
-   glUniformMatrix4fv(uniform_loc,1,GL_FALSE,glm::value_ptr(perspective));
+      GLint uniform_loc = glGetUniformLocation(program_id,"projection");
+      glUniformMatrix4fv(uniform_loc,1,GL_FALSE,glm::value_ptr(perspective));
 
-   glm::mat4 view;
+      glm::mat4 view;
 
-   view[3][2] = depth_;
+      view[3][2] = depth_;
 
-   uniform_loc = glGetUniformLocation(program_id,"view");
-   glUniformMatrix4fv(uniform_loc,1,GL_FALSE,glm::value_ptr(view));
+      uniform_loc = glGetUniformLocation(program_id,"view");
+      glUniformMatrix4fv(uniform_loc,1,GL_FALSE,glm::value_ptr(view));
 
-   glm::vec3 lightpos(0.0,0.0,5.0);
-   uniform_loc = glGetUniformLocation(program_id,"lightpos");
-   glUniform3fv(uniform_loc,1,glm::value_ptr(lightpos));
+      glm::vec3 lightpos(0.0,0.0,5.0);
+      uniform_loc = glGetUniformLocation(program_id,"lightpos");
+      glUniform3fv(uniform_loc,1,glm::value_ptr(lightpos));
 
-   glm::ivec3 dim(vf.dim_[0],vf.dim_[1],vf.dim_[2]);
-   uniform_loc = glGetUniformLocation(program_id,"dim");
-   glUniform3iv(uniform_loc,1,glm::value_ptr(dim));
+      glm::ivec3 dim(vf.dim_[0],vf.dim_[1],vf.dim_[2]);
+      uniform_loc = glGetUniformLocation(program_id,"dim");
+      glUniform3iv(uniform_loc,1,glm::value_ptr(dim));
 
-   glm::vec2 interval(vf.min_,vf.max_);
-   uniform_loc = glGetUniformLocation(program_id,"interval");
-   glUniform2fv(uniform_loc,1,glm::value_ptr(interval));
+      glm::vec2 interval(vf.min_,vf.max_);
+      uniform_loc = glGetUniformLocation(program_id,"interval");
+      glUniform2fv(uniform_loc,1,glm::value_ptr(interval));
+   }
 
    float border_color[] = {0.0f,0.0f,0.0f,1.0f};
  

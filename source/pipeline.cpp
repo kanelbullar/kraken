@@ -12,15 +12,20 @@ namespace kraken {
       glEnable(GL_MULTISAMPLE_ARB);
       glEnable(GL_DEPTH_TEST);
 
-      std::array<std::string,3> shader_stages = {{"pass",
-                                                  "streamline",
-                                                  "simple"}};
+      std::array<std::string,3> 
 
-      config_.add_shader(shader_stages[0],GL_VERTEX_SHADER);
-      config_.add_shader(shader_stages[1],GL_GEOMETRY_SHADER);
-      config_.add_shader(shader_stages[2],GL_FRAGMENT_SHADER);
-      config_.add_program("triangle",shader_stages);
-      config_.enable_program("triangle");
+      glyph_stages      = {{"pass","glyph","phong"}},
+      streamline_stages = {{"pass","streamline","simple"}};
+
+      config_.add_shader(glyph_stages[0],GL_VERTEX_SHADER);
+      config_.add_shader(glyph_stages[1],GL_GEOMETRY_SHADER);
+      config_.add_shader(streamline_stages[1],GL_GEOMETRY_SHADER);
+      config_.add_shader(glyph_stages[2],GL_FRAGMENT_SHADER);
+      config_.add_shader(streamline_stages[2],GL_FRAGMENT_SHADER);
+
+      config_.add_program("glyph",glyph_stages);
+      config_.add_program("streamline",streamline_stages);
+      config_.enable_program("streamline");
 
       config_.aspect_ratio(res);
       config_.load_default(vf);
@@ -49,6 +54,10 @@ namespace kraken {
          case 43  : config_.zoom(true) ;  view_changed_ = true ; break;
 
          case 45  : config_.zoom(false) ; view_changed_ = true ; break;
+
+         case 49  :  break;
+
+         case 50  :  break;
 
          case 114 : config_.reload_shader(); break;
       }
