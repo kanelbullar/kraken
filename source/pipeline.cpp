@@ -14,18 +14,22 @@ namespace kraken {
 
       std::array<std::string,3> 
 
-      glyph_stages      = {{"pass","glyph","phong"}},
-      streamline_stages = {{"pass","streamline","simple"}};
+      glyph_stages        = {{"pass","glyph","phong"}},
+      streamline_stages   = {{"pass","streamline","simple"}},
+      bounding_box_stages = {{"pass","bounding_box","white"}};
 
       config_.add_shader(glyph_stages[0],GL_VERTEX_SHADER);
       config_.add_shader(glyph_stages[1],GL_GEOMETRY_SHADER);
       config_.add_shader(streamline_stages[1],GL_GEOMETRY_SHADER);
+      config_.add_shader(bounding_box_stages[1],GL_GEOMETRY_SHADER);
       config_.add_shader(glyph_stages[2],GL_FRAGMENT_SHADER);
       config_.add_shader(streamline_stages[2],GL_FRAGMENT_SHADER);
+      config_.add_shader(bounding_box_stages[2],GL_FRAGMENT_SHADER);
 
       config_.add_program("glyph",glyph_stages);
       config_.add_program("streamline",streamline_stages);
-      config_.enable_program("streamline");
+      config_.add_program("bounding_box",bounding_box_stages);
+      config_.enable_program("bounding_box");
 
       config_.aspect_ratio(res);
       config_.load_default(vf);
