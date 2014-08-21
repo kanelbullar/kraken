@@ -28,7 +28,8 @@ namespace kraken {
 
       config_.add_program("glyph",glyph_stages);
       config_.add_program("streamline",streamline_stages);
-      config_.enable_program("glyph");
+      config_.add_program("bounding_box",bounding_box_stages);
+      config_.enable_program("streamline");
 
 
 

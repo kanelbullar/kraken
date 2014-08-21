@@ -142,14 +142,11 @@ void gl_config::load_default(vector_field const& vf) {
 
    GLuint vbo,vao;
 
-   float center[] = {0.0,0.0,0.0};
-
    glGenBuffers(1,&vbo);
    glGenVertexArrays(1,&vao);
 
    glBindBuffer(GL_ARRAY_BUFFER,vbo);
-   //glBufferData(GL_ARRAY_BUFFER,pos.size_,pos.data_,GL_STATIC_DRAW);
-   glBufferData(GL_ARRAY_BUFFER,sizeof(center),&center[0],GL_STATIC_DRAW);
+   glBufferData(GL_ARRAY_BUFFER,pos.size_,pos.data_,GL_STATIC_DRAW);
    glBindVertexArray(vao);
 
    for(auto program  = program_store_.begin() ;
