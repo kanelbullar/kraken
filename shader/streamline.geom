@@ -15,9 +15,6 @@ out vec3 color;
 
 vec3 transfer(float absolute) {
 
-   /*vec3 c_min = vec3(0.0,0.0,0.8),
-        c_max = vec3(1.0,0.8,0.0);*/
-
    vec3 c_min = vec3(0.0,0.0,1.0),
         c_max = vec3(1.0,0.0,0.0);
 
