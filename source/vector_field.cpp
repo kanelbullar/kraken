@@ -22,10 +22,4 @@ namespace kraken {
       delete[] data;
    }
 
-   vec3 vector_field::index_to_coord(unsigned long index) {
-      unsigned short z = index / dim_[0] * dim_[1];
-      unsigned short y = index - (z*dim_[0]*dim_[1]);
-      unsigned short x = index - (y*dim_[0]);
-      return vec3{{x,y,z}};
-   }
 }

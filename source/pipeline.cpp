@@ -25,7 +25,7 @@ namespace kraken {
 
       config_.add_program("glyph",glyph_stages);
       config_.add_program("streamline",streamline_stages);
-      config_.enable_program("streamline");
+      config_.enable_program("glyph");
 
       config_.aspect_ratio(res);
       config_.load_default(vf);

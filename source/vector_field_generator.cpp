@@ -3,6 +3,14 @@
 
 namespace kraken {
 
+   vec3f vector_field_generator::index_to_coord(unsigned long index, vec3 dim) {      
+      float z = index / (dim[0] * dim[1]);
+      float y = (index - (z * dim[0] * dim[1]))/dim[0];
+      //y = reinterpret_cast<float> (reinterpret_cast<int> (y));
+      float x = index - (z * dim[0] * dim[1]);
+      return vec3f{{x,y,z}};
+   }
+
    // RANDOM
    vector_field const vector_field_generator::
 
@@ -36,6 +44,7 @@ namespace kraken {
    
       return vector_field(dim, data_ptr, min, max);
    }
+
 
    //ONE DIRECTION
    vector_field const vector_field_generator::
@@ -74,12 +83,32 @@ namespace kraken {
       return vector_field(dim, data_ptr, 0, 1);
    }
 
-   // TODO: SPHERE
+
+   //SPEHRE
    vector_field const vector_field_generator::
 
-   sphere(vec3 const& dim, vec3 const& center, sphere_type type) {
+   sphere(vec3 const& dim, vec3f const& center, sphere_type type) {
       
-      return vector_field(dim, nullptr, 0, 0);
+      unsigned long size = dim[0]*dim[1]*dim[2]*3;
+
+      float* data = new float[size];
+
+      unsigned long index = 0;
+
+      for(unsigned short z = 0 ; z < dim[2] ; ++z) {  
+         for(unsigned short y = 0 ; y < dim[1] ; ++y) {  
+            for(unsigned short x = 0 ; x < dim[0] ; ++x) {  
+               data[index]   = center[0] - x;
+               data[++index] = center[1] - y;
+               data[++index] = center[2] - z;
+               ++index;
+            }
+         }
+      }
+
+      void* data_ptr = reinterpret_cast<void*> (data);
+
+      return vector_field(dim, data_ptr, 0, 1);
    }
 
 }
