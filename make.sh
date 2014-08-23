@@ -1,14 +1,20 @@
-g++ main.cpp\
-   source/exception.cpp\
-   source/gl_config.cpp\
-   source/vector_field.cpp\
-   source/vector_field_generator.cpp\
-   source/pipeline.cpp\
-   source/progress.cpp\
-   source/window.cpp\
-   source/particle_emitter.cpp\
-   -omain -std=c++11 -Wall -pedantic\
-   -Iinclude\
-   -lGLEW -lglut\
-   -L/usr/lib/nvidia-331\
-   -lGL
+clang++ main.cpp\
+ source/config.cpp\
+ source/particle_emitter.cpp\
+ source/pipeline.cpp\
+ source/progress.cpp\
+ source/program.cpp\
+ source/stage.cpp\
+ source/uniform_map.cpp\
+ source/vector_field.cpp\
+ source/vector_field_generator.cpp\
+ source/viewer.cpp\
+ -omain\
+ -std=c++11\
+ -Wall\
+ -pedantic\
+ -Iinclude\
+ -lGLEW\
+ -lglut\
+ -L/usr/lib/nvidia-331\
+ -lGL

@@ -16,7 +16,7 @@ namespace kraken {
          for(float y = -(dim[1]/2); y < dim[1]/2; y+=dim[1]/number_f) {
             for(float x = -(dim[0]/2); x < dim[0]/2; x+=dim[0]/number_f) {
               
-               particle.push_back(pos3{x,y,z});
+               particle.push_back(pos3{{x,y,z}});
             }
          }
       }
@@ -40,9 +40,9 @@ namespace kraken {
       std::uniform_real_distribution<float> z_dist(-(dim[2]/2),dim[2]/2);  
 
       for(int index = 0; index < number; ++index) {
-         particle.push_back(pos3{x_dist(generator),
-                                   y_dist(generator),
-                                   z_dist(generator)});
+         particle.push_back(pos3{{x_dist(generator),
+                                  y_dist(generator),
+                                  z_dist(generator)}});
       }
    
       return convert(particle);
@@ -64,7 +64,7 @@ namespace kraken {
             
             for(float y = pos[1]; y < pos[1] + dim[1]; y+=dim[1]/number_f) {
                for(float x = pos[0]; x < pos[0] + dim[0]; x+=dim[0]/number_f) {
-                  particle.push_back(pos3{x,y,static_cast<float>(pos[2])});
+                  particle.push_back(pos3{{x,y,static_cast<float>(pos[2])}});
                }
             }
             break;
@@ -73,7 +73,7 @@ namespace kraken {
 
             for(float y = pos[1]; y < pos[1] + dim[1]; y+=dim[1]/number_f) {
                for(float x = pos[0]; x < pos[0] + dim[0]; x+=dim[0]/number_f) {
-                  particle.push_back(pos3{x,y,static_cast<float>(pos[2]+dim[2])});
+                  particle.push_back(pos3{{x,y,static_cast<float>(pos[2]+dim[2])}});
                }
             }
             break;
@@ -82,7 +82,7 @@ namespace kraken {
    
             for(float z = pos[2]; z < pos[2] + dim[2]; z+=dim[2]/number_f) {
                for(float x = pos[0]; x < pos[0] + dim[0]; x+=dim[0]/number_f) {
-                  particle.push_back(pos3{x,static_cast<float>(pos[1]),z});
+                  particle.push_back(pos3{{x,static_cast<float>(pos[1]),z}});
                }
             }
             break;
@@ -91,7 +91,7 @@ namespace kraken {
 
             for(float z = pos[2]; z < pos[2] + dim[2]; z+=dim[2]/number_f) {
                for(float x = pos[0]; x < pos[0] + dim[0]; x+=dim[0]/number_f) {
-                  particle.push_back(pos3{x,static_cast<float>(pos[1]+dim[1]),z});
+                  particle.push_back(pos3{{x,static_cast<float>(pos[1]+dim[1]),z}});
                }
             }
             break;
@@ -100,7 +100,7 @@ namespace kraken {
 
             for(float z = pos[2]; z < pos[2] + dim[2]; z+=dim[2]/number_f) {
                for(float y = pos[1]; y < pos[1] + dim[1]; y+=dim[1]/number_f) {
-                  particle.push_back(pos3{static_cast<float>(pos[0]),y,z});
+                  particle.push_back(pos3{{static_cast<float>(pos[0]),y,z}});
                }
             }
             break;
@@ -109,7 +109,7 @@ namespace kraken {
 
             for(float z = pos[2]; z < pos[2] + dim[2]; z+=dim[2]/number_f) {
                for(float y = pos[1]; y < pos[1] + dim[1]; y+=dim[1]/number_f) {
-                  particle.push_back(pos3{static_cast<float>(pos[0]+dim[0]),y,z});
+                  particle.push_back(pos3{{static_cast<float>(pos[0]+dim[0]),y,z}});
                }
             }
             break;     

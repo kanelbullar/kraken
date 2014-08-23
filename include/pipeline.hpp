@@ -1,33 +1,47 @@
-#ifndef KRAKEN_PIPELINE
-#define KRAKEN_PIPELINE
+#ifndef PIPELINE_HPP
+#define PIPELINE_HPP
 
-#include <gl_config.hpp>
-#include <vector_field.hpp>
+#include <program.hpp>
+#include <uniform_map.hpp>
 
-namespace kraken {
+#include <vector>
 
-class pipeline {
 
-   public :
+typedef std::vector<program>::iterator program_iterator;
 
-   static void init(vector_field const&,std::array<unsigned short,2> const&);
+typedef std::vector<std::shared_ptr<stage> >::iterator stage_iterator;
 
-   static void display();
-   static void key(unsigned char,int,int);
-   static void reshape(int,int);
-   static void special(int,int,int);
-   static void time(int);
 
-   private :
+class pipeline
+{
+  public :
 
-   static void update();
+  void enable(std::string const&);
 
-   static gl_config config_;
-   static unsigned short frame_number_;
+  void add_program(std::string const&);
 
-   static bool view_changed_ , proj_changed_;
+  void set_stage(std::string const&,std::string const&);
+
+  void set_link(std::string const&,std::string const&);
+
+  void link_programs();
+
+
+  uniform_map uniforms_;
+
+
+  private :
+
+  program_iterator const find_program(std::string const&);
+
+  stage_iterator const find_stage(std::string const&);
+
+
+  std::vector<program> programs_;
+
+  std::vector<std::shared_ptr<stage> > stages_;
+
+  std::vector<uniform_link> links_;
 };
-
-}
 
 #endif
