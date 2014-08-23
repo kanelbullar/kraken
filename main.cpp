@@ -1,24 +1,17 @@
-#include <iostream>
-
 #include <vector_field_generator.hpp>
-#include <window.hpp>
-#include <particle_emitter.hpp>
+#include <viewer.hpp>
 
-int main(int argc, char** argv) {
-   
-   std::cout << "Release the kraken!" << std::endl;
+int main(int argc,char** argv) {
+
+   std::array<unsigned short,3> dim{{20,20,20}};
 
    kraken::vector_field_generator generator;
+   
+   kraken::viewer v(1000,800);
 
-   std::array<unsigned short,3> dim {8,8,8};
+   v.init(argc,argv);
 
-   kraken::vector_field vf (generator.tornado(dim));
-   //kraken::vector_field vf (generator.random(dim));
-   //kraken::vector_field vf (generator.one_direction(dim,kraken::LEFT));
-
-   kraken::window window(1000,800);
-
-   window.open(argc,argv,vf);
+   v.open(generator.random(dim));
 
    return 0;
 }

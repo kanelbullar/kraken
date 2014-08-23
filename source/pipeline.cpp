@@ -2,138 +2,174 @@
 
 #include <iostream>
 
-namespace kraken {
 
-   void pipeline::
+void pipeline::
 
-   init(vector_field const& vf,std::array<unsigned short,2> const& res) {
+enable(std::string const& program_name) {
 
-      glClearColor(0.2,0.2,0.2,1.0);
-      glEnable(GL_MULTISAMPLE_ARB);
-      glEnable(GL_DEPTH_TEST);
+  program_iterator p_it(find_program(program_name));
 
-      std::array<std::string,3> 
+  if(p_it != programs_.end()) {
 
-      glyph_stages        = {{"pass","glyph","phong"}},
-      streamline_stages   = {{"pass","streamline","simple"}},
-      bounding_box_stages = {{"pass","bounding_box","white"}};
+    if(p_it->id() != 0) {
 
-      config_.add_shader(glyph_stages[0],GL_VERTEX_SHADER);
-      config_.add_shader(glyph_stages[1],GL_GEOMETRY_SHADER);
-      config_.add_shader(streamline_stages[1],GL_GEOMETRY_SHADER);
-      config_.add_shader(bounding_box_stages[1],GL_GEOMETRY_SHADER);
-      config_.add_shader(glyph_stages[2],GL_FRAGMENT_SHADER);
-      config_.add_shader(streamline_stages[2],GL_FRAGMENT_SHADER);
-      config_.add_shader(bounding_box_stages[2],GL_FRAGMENT_SHADER);
+      glUseProgram(p_it->id());
 
-      config_.add_program("glyph",glyph_stages);
-      config_.add_program("streamline",streamline_stages);
-      config_.add_program("bounding_box",bounding_box_stages);
-      config_.enable_program("glyph");
+      for(auto l_it(links_.begin()) ; l_it != links_.end() ; ++l_it) {
 
-
-
-      config_.aspect_ratio(res);
-      config_.load_default(vf);
-   }
-
-   void pipeline::display() {
-
-      glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-      glDrawArrays(GL_POINTS,0,config_.particle_number());
-      glutSwapBuffers();
-      glutPostRedisplay();
-      update();
-
-      ++frame_number_;
-   }
-
-
-   void pipeline::key(unsigned char key, int x, int y) {
-
-      unsigned short key_id = static_cast<unsigned short> (key);
-
-      switch(key_id) {
-
-         case 27  : glutLeaveMainLoop(); break;
-
-         case 43  : config_.zoom(true) ;  view_changed_ = true ; break;
-
-         case 45  : config_.zoom(false) ; view_changed_ = true ; break;
-
-         case 49  :  break;
-
-         case 50  :  break;
-
-         case 114 : config_.reload_shader(); break;
+        if(l_it->program_id_ == p_it->id()) uniforms_.load(*l_it);
       }
-   }
+    }
+
+    else {
+
+      std::cerr << std::endl
+                << "program [" << program_name << "] isn't linked"
+                << std::endl;
+    }    
+  }
+
+  else {
+
+    std::cerr << std::endl
+              << "program [" << program_name << "] doesn't exists"
+              << std::endl;
+  }
+}
 
 
-   void pipeline::special(int key, int x, int y) {
+void pipeline::
 
-      switch(key) {
-         
-         case 100 : config_.rotate(false,false) ; view_changed_ = true ; break;
+add_program(std::string const& name) {
 
-         case 102 : config_.rotate(false,true)  ; view_changed_ = true ; break;
+  program_iterator p_it(find_program(name));
 
-         case 103 : config_.rotate(true,false)  ; view_changed_ = true ; break;
+  if(p_it == programs_.end()) {
 
-         case 101 : config_.rotate(true,true)   ; view_changed_ = true ; break;
-      }
-   }
+    programs_.push_back(program(name));
+  }
 
+  else {
 
-   void pipeline::reshape(int width , int height) {
-
-      std::array<unsigned short,2> res;
-
-      res[0] = static_cast<unsigned short> (width);
-      res[1] = static_cast<unsigned short> (height);
-
-      config_.aspect_ratio(res);
-
-      proj_changed_ = true;
-   }
+    std::cerr << std::endl
+              << "program [" << name << "] already exists"
+              << std::endl;
+  }
+}
 
 
-   void pipeline::time(int init) {
+void pipeline::
 
-      unsigned short fps(4*frame_number_);
+set_stage(std::string const& program_name , std::string const& stage_path) {
 
-      std::string new_title("Release the kraken!   |   FPS : ");
-      new_title.append(std::to_string(fps));
+  program_iterator p_it(find_program(program_name));
 
-      glutSetWindowTitle(new_title.c_str());
-      frame_number_ = 0;
+  if(p_it != programs_.end()) {
 
-      glutTimerFunc(250,time,0);
-   }
+    stage_iterator s_it(find_stage(stage_path));
+
+    if(s_it == stages_.end()) {
+
+      std::shared_ptr<stage> s(std::make_shared<stage>(stage(stage_path)));
+
+      stages_.push_back(s);
+
+      p_it->define_stage(s);
+    }
+
+    else {
+
+      std::shared_ptr<stage> s(*s_it);
+
+      p_it->define_stage(s);
+    }
+  }
+
+  else {
+
+    std::cerr << std::endl
+              << "program [" << program_name << "] doesn't exist"
+              << std::endl;
+  }
+}
 
 
-   void pipeline::update() {
+void pipeline::
 
-      if(view_changed_) {
+set_link(std::string const& program_name , std::string const& uniform_name) {
 
-         config_.load_model();
-         view_changed_ = false;
+  program_iterator p_it(find_program(program_name));
+
+  if(p_it != programs_.end()) {
+
+    if(uniforms_.aviable(uniform_name)) {
+
+      if(p_it->id() != 0) {
+
+        links_.push_back(uniform_link(p_it->id(),uniform_name));
       }
 
-      if(proj_changed_) {
+      else {
 
-         config_.load_projection();
-         proj_changed_ = false;
-      } 
-   }
+        std::cerr << std::endl
+                  << "program [" << program_name << "] isn't linked"
+                  << std::endl;
+      }
+    }
+
+    else {
+
+      std::cerr << std::endl
+                << "uniform [" << uniform_name << "] doesn't exist"
+                << std::endl;
+    }
+  }
+
+  else {
+
+    std::cerr << std::endl
+              << "program [" << program_name << "] doesn't exist"
+              << std::endl;
+  }
+}
 
 
-   // initialize static member
+void pipeline::
 
-   gl_config pipeline::config_ = gl_config();
+link_programs() {
 
-   unsigned short pipeline::frame_number_ = 0;
+  for(auto p_it(programs_.begin()) ; p_it != programs_.end() ; ++p_it) {
 
-   bool pipeline::view_changed_ = false;
-   bool pipeline::proj_changed_ = false;
+    p_it->link();
+  }
+}
+
+
+program_iterator const pipeline::
+
+find_program(std::string const& name) {
+
+  program_iterator p_it;
+
+  for(p_it = programs_.begin() ; p_it != programs_.end() ; ++p_it) {
+
+    if(p_it->equal(name)) break;
+  }
+
+  return p_it;
+}
+
+
+stage_iterator const pipeline::
+
+find_stage(std::string const& path) {
+
+  stage_iterator s_it;
+
+  for(s_it = stages_.begin() ; s_it != stages_.end() ; ++s_it) {
+
+    if(s_it->get()->equal(path)) break;
+  }
+
+  return s_it;
 }
