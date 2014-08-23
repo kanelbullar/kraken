@@ -12,7 +12,7 @@ namespace kraken {
 
     viewer(unsigned short,unsigned short);
 
-    void open();
+    void open(vector_field const&);
     void init(int,char**) const;
 
 

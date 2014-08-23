@@ -15,7 +15,7 @@ res_(std::array<unsigned short,2> {{width,height}})
 
 void viewer::
 
-open() {
+open(vector_field const& velocity_field) {
 
    handle_ = glutCreateWindow("Kraken");
 
@@ -42,7 +42,11 @@ open() {
 
       else {
 
-         config::init();
+         float aspect_ratio(static_cast<float> (res_[0]));
+
+         aspect_ratio /= res_[1];
+
+         config::init(aspect_ratio);
          glutDisplayFunc(config::display);
          glutKeyboardFunc(config::key);
 
