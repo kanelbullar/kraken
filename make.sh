@@ -1,4 +1,4 @@
-clang++ main.cpp\
+g++ main.cpp\
  source/config.cpp\
  source/particle_emitter.cpp\
  source/pipeline.cpp\

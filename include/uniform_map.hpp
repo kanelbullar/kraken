@@ -10,8 +10,8 @@
 #include <glm/glm.hpp>
 
 
-struct uniform_link
-{
+struct uniform_link {
+
   inline uniform_link(GLuint id,std::string const& name) :
   program_id_(id),
   uniform_name_(name)
@@ -26,8 +26,8 @@ struct uniform_link
 enum uniform_type {VEC2,VEC3,IVEC3,MAT4};
 
 
-class uniform_map
-{
+class uniform_map {
+
   public :
 
   void load(uniform_link const&) const;

@@ -9,44 +9,44 @@ stage::
 stage(std::string const& path) :
 id_(0),
 type_(GL_INVALID_ENUM),
-path_(path)
-{
+path_(path) {
+
   type_ = recognize_type();
 }
 
 
 stage::
 
-~stage()
-{
+~stage() {
+
   clear();
 }
 
 
 GLuint stage::
 
-compile()
-{
-  if(id_ != 0)
-  {
+compile() {
+
+  if(id_ != 0) {
+
     clear();
   }
 
-  if(type_ != GL_INVALID_ENUM)
-  {
+  if(type_ != GL_INVALID_ENUM) {
+
     const char* source(load());
 
-    if(source != nullptr)
-    {
+    if(source != nullptr) {
+
       id_ = glCreateShader(type_);
 
-      if(id_ != 0)
-      {
+      if(id_ != 0) {
+
         glShaderSource(id_,1,&source,nullptr);
         glCompileShader(id_);
 
-        if(!compile_feedback())
-        {
+        if(!compile_feedback()) {
+
           clear();
         }
       }
@@ -61,8 +61,8 @@ compile()
 
 bool stage::
 
-equal(std::string const& path) const
-{
+equal(std::string const& path) const {
+
   if(path_.compare(path) == 0) return true;
 
   return false;
@@ -71,26 +71,26 @@ equal(std::string const& path) const
 
 GLenum stage::
 
-id() const
-{
+id() const {
+
   return id_;
 }
 
 
 GLenum stage::
 
-type() const
-{
+type() const {
+
   return type_;
 }
 
 
 void stage::
 
-clear()
-{
-  if(id_ != 0)
-  {
+clear() {
+
+  if(id_ != 0) {
+
     glDeleteShader(id_);
 
     id_ = 0;
@@ -100,28 +100,28 @@ clear()
 
 const GLchar* const stage::
 
-load() const
-{
+load() const {
+
   GLchar* source(nullptr);
 
   std::ifstream input(path_);
 
-  if(input.good())
-  {
+  if(input.good()) {
+
     unsigned short length(0);
 
     input.seekg(0,input.end);
     length = input.tellg();
     input.seekg(0,input.beg);
 
-    if(length != 0)
-    {
+    if(length != 0) {
+
       source = new char[length - 1];
 
       input.get(source,length,EOF);
 
-      if(input.gcount() != length - 1)
-      {
+      if(input.gcount() != length - 1) {
+
         std::cerr << std::endl
                   << "failed to load " << path_
                   << std::endl;
@@ -135,8 +135,8 @@ load() const
     input.close();
   }
 
-  else
-  {
+  else {
+
     std::cerr << std::endl
               << "file " << path_ << " doesn't exist"
               << std::endl;
@@ -147,21 +147,21 @@ load() const
 
 bool stage::
 
-compile_feedback() const
-{
+compile_feedback() const {
+
   GLint status(GL_FALSE);
 
   glGetShaderiv(id_,GL_COMPILE_STATUS,&status);
 
-  if(status != GL_TRUE)
-  {
+  if(status != GL_TRUE) {
+
     GLint   length(0);
     GLchar* info_buffer(nullptr);
 
     glGetShaderiv(id_,GL_INFO_LOG_LENGTH,&length);
 
-    if(length != 0)
-    {
+    if(length != 0) {
+
       info_buffer = new GLchar[length];
 
       glGetShaderInfoLog(id_,length,nullptr,info_buffer);
@@ -178,22 +178,22 @@ compile_feedback() const
     return false;
   }
 
-  else
-  {
+  else {
+
     return true;
   }
 }
 
 GLenum stage::
 
-recognize_type() const
-{
+recognize_type() const {
+
   GLenum type(GL_INVALID_ENUM);
 
   size_t suffix_pos(path_.rfind('.'));
 
-  if(suffix_pos != std::string::npos)
-  {
+  if(suffix_pos != std::string::npos) {
+
     ++suffix_pos;
 
     size_t suffix_length(path_.length() - suffix_pos);
@@ -204,16 +204,16 @@ recognize_type() const
     else if(suffix.compare("geom") == 0) type = GL_GEOMETRY_SHADER;
     else if(suffix.compare("frag") == 0) type = GL_FRAGMENT_SHADER;
 
-    else
-    {
+    else {
+
       std::cerr << std::endl
                 << "invalid stage suffix : " << path_
                 << std::endl;
     }
   }
 
-  else
-  {
+  else {
+
       std::cerr << std::endl
                 << "missing stage suffix : " << path_
                 << std::endl;

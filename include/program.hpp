@@ -7,8 +7,8 @@
 #include <memory>
 
 
-class program
-{
+class program {
+
   public :
 
   program(std::string const&);

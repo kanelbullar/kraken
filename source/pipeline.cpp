@@ -5,32 +5,32 @@
 
 void pipeline::
 
-enable(std::string const& program_name)
-{
+enable(std::string const& program_name) {
+
   program_iterator p_it(find_program(program_name));
 
-  if(p_it != programs_.end())
-  {
-    if(p_it->id() != 0)
-    {
+  if(p_it != programs_.end()) {
+
+    if(p_it->id() != 0) {
+
       glUseProgram(p_it->id());
 
-      for(auto l_it(links_.begin()) ; l_it != links_.end() ; ++l_it)
-      {
+      for(auto l_it(links_.begin()) ; l_it != links_.end() ; ++l_it) {
+
         if(l_it->program_id_ == p_it->id()) uniforms_.load(*l_it);
       }
     }
 
-    else
-    {
+    else {
+
       std::cerr << std::endl
                 << "program [" << program_name << "] isn't linked"
                 << std::endl;
     }    
   }
 
-  else
-  {
+  else {
+
     std::cerr << std::endl
               << "program [" << program_name << "] doesn't exists"
               << std::endl;
@@ -40,17 +40,17 @@ enable(std::string const& program_name)
 
 void pipeline::
 
-add_program(std::string const& name)
-{
+add_program(std::string const& name) {
+
   program_iterator p_it(find_program(name));
 
-  if(p_it == programs_.end())
-  {
+  if(p_it == programs_.end()) {
+
     programs_.push_back(program(name));
   }
 
-  else
-  {
+  else {
+
     std::cerr << std::endl
               << "program [" << name << "] already exists"
               << std::endl;
@@ -60,16 +60,16 @@ add_program(std::string const& name)
 
 void pipeline::
 
-set_stage(std::string const& program_name , std::string const& stage_path)
-{
+set_stage(std::string const& program_name , std::string const& stage_path) {
+
   program_iterator p_it(find_program(program_name));
 
-  if(p_it != programs_.end())
-  {
+  if(p_it != programs_.end()) {
+
     stage_iterator s_it(find_stage(stage_path));
 
-    if(s_it == stages_.end())
-    {
+    if(s_it == stages_.end()) {
+
       std::shared_ptr<stage> s(std::make_shared<stage>(stage(stage_path)));
 
       stages_.push_back(s);
@@ -77,14 +77,16 @@ set_stage(std::string const& program_name , std::string const& stage_path)
       p_it->define_stage(s);
     }
 
-    else
-    {
-      p_it->define_stage(*s_it);
+    else {
+
+      std::shared_ptr<stage> s(*s_it);
+
+      p_it->define_stage(s);
     }
   }
 
-  else
-  {
+  else {
+
     std::cerr << std::endl
               << "program [" << program_name << "] doesn't exist"
               << std::endl;
@@ -94,37 +96,37 @@ set_stage(std::string const& program_name , std::string const& stage_path)
 
 void pipeline::
 
-set_link(std::string const& program_name , std::string const& uniform_name)
-{
+set_link(std::string const& program_name , std::string const& uniform_name) {
+
   program_iterator p_it(find_program(program_name));
 
-  if(p_it != programs_.end())
-  {
-    if(uniforms_.aviable(uniform_name))
-    {
-      if(p_it->id() != 0)
-      {
+  if(p_it != programs_.end()) {
+
+    if(uniforms_.aviable(uniform_name)) {
+
+      if(p_it->id() != 0) {
+
         links_.push_back(uniform_link(p_it->id(),uniform_name));
       }
 
-      else
-      {
+      else {
+
         std::cerr << std::endl
                   << "program [" << program_name << "] isn't linked"
                   << std::endl;
       }
     }
 
-    else
-    {
+    else {
+
       std::cerr << std::endl
                 << "uniform [" << uniform_name << "] doesn't exist"
                 << std::endl;
     }
   }
 
-  else
-  {
+  else {
+
     std::cerr << std::endl
               << "program [" << program_name << "] doesn't exist"
               << std::endl;
@@ -134,10 +136,10 @@ set_link(std::string const& program_name , std::string const& uniform_name)
 
 void pipeline::
 
-link_programs()
-{
-  for(auto p_it(programs_.begin()) ; p_it != programs_.end() ; ++p_it)
-  {
+link_programs() {
+
+  for(auto p_it(programs_.begin()) ; p_it != programs_.end() ; ++p_it) {
+
     p_it->link();
   }
 }
@@ -145,12 +147,12 @@ link_programs()
 
 program_iterator const pipeline::
 
-find_program(std::string const& name)
-{
+find_program(std::string const& name) {
+
   program_iterator p_it;
 
-  for(p_it = programs_.begin() ; p_it != programs_.end() ; ++p_it)
-  {
+  for(p_it = programs_.begin() ; p_it != programs_.end() ; ++p_it) {
+
     if(p_it->equal(name)) break;
   }
 
@@ -160,12 +162,12 @@ find_program(std::string const& name)
 
 stage_iterator const pipeline::
 
-find_stage(std::string const& path)
-{
+find_stage(std::string const& path) {
+
   stage_iterator s_it;
 
-  for(s_it = stages_.begin() ; s_it != stages_.end() ; ++s_it)
-  {
+  for(s_it = stages_.begin() ; s_it != stages_.end() ; ++s_it) {
+
     if(s_it->get()->equal(path)) break;
   }
 

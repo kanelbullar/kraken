@@ -14,28 +14,28 @@ stages_()
 
 program::
 
-~program()
-{
+~program() {
+
   clear();
 }
 
 
 void program::
 
-link()
-{
+link() {
+
   if(id_ != 0) clear();
 
   id_ = glCreateProgram();
 
-  if(id_ != 0)
-  {
-    for(auto it(stages_.begin()) ; it != stages_.end() ; ++it)
-    {
+  if(id_ != 0) {
+
+    for(auto it(stages_.begin()) ; it != stages_.end() ; ++it) {
+
       stage* stage_ptr(it->get());
 
-      if(stage_ptr != nullptr)
-      {
+      if(stage_ptr != nullptr) {
+
         GLuint stage_id(stage_ptr->compile());
 
         if(stage_id != 0) glAttachShader(id_,stage_id);
@@ -52,10 +52,10 @@ link()
 
 void program::
 
-reset_stage(GLenum type)
-{
-  switch(type)
-  {
+reset_stage(GLenum type) {
+
+  switch(type) {
+
     case GL_VERTEX_SHADER :
 
     if(stages_[0].get() != nullptr) stages_[0].reset();
@@ -76,10 +76,10 @@ reset_stage(GLenum type)
 
 void program::
 
-define_stage(std::shared_ptr<stage> & stage_ptr)
-{
-  switch(stage_ptr->type())
-  {
+define_stage(std::shared_ptr<stage> & stage_ptr) {
+
+  switch(stage_ptr->type()) {
+
     case GL_VERTEX_SHADER :
 
     stages_[0].swap(stage_ptr);
@@ -100,8 +100,8 @@ define_stage(std::shared_ptr<stage> & stage_ptr)
 
 bool program::
 
-equal(std::string const& name) const
-{
+equal(std::string const& name) const {
+
   if(name_.compare(name) == 0) return true;
 
   return false;
@@ -110,16 +110,16 @@ equal(std::string const& name) const
 
 GLuint program::
 
-id() const
-{
+id() const {
+
   return id_;
 }
 
 
 void program::
 
-clear()
-{
+clear() {
+
   glDeleteProgram(id_);
 
   id_ = 0;
@@ -128,14 +128,14 @@ clear()
 
 void program::
 
-clear_stages() const
-{
-  for(auto it(stages_.begin()) ; it != stages_.end() ; ++it)
-  {
+clear_stages() const {
+
+  for(auto it(stages_.begin()) ; it != stages_.end() ; ++it) {
+
     stage* stage_ptr(it->get());
 
-    if(stage_ptr != nullptr)
-    {
+    if(stage_ptr != nullptr) {
+
       if(id_ != 0) glDetachShader(id_,stage_ptr->id());
 
       stage_ptr->clear();
@@ -146,21 +146,21 @@ clear_stages() const
 
 bool program::
 
-link_feedback() const
-{
+link_feedback() const {
+
   GLint link_status(GL_FALSE);
 
   glGetProgramiv(id_,GL_LINK_STATUS,&link_status);
 
-  if(link_status != GL_TRUE)
-  {
+  if(link_status != GL_TRUE) {
+
     GLint   length(0);
     GLchar* info_buffer(nullptr);
 
     glGetProgramiv(id_,GL_INFO_LOG_LENGTH,&length);
 
-    if(length != 0)
-    {
+    if(length != 0) {
+
       info_buffer = new GLchar[length];
 
       glGetProgramInfoLog(id_,length,&length,info_buffer);
@@ -177,8 +177,8 @@ link_feedback() const
     return false;
   }
 
-  else
-  {
+  else {
+
     return true;
   }
 }

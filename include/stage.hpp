@@ -6,8 +6,8 @@
 #include <GL/glew.h>
 
 
-class stage
-{
+class stage {
+
   public :
 
   stage(std::string const&);
