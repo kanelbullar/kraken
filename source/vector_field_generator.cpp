@@ -5,10 +5,13 @@ namespace kraken {
 
    vec3f vector_field_generator::index_to_coord(unsigned long index, vec3 dim) {      
       float z = index / (dim[0] * dim[1]);
-      float y = (index - (z * dim[0] * dim[1]))/dim[0];
-      //y = reinterpret_cast<float> (reinterpret_cast<int> (y));
-      float x = index - (z * dim[0] * dim[1]);
+      float y = int((index - (z * dim[0] * dim[1]))/dim[0]);
+      float x = index%8;
       return vec3f{{x,y,z}};
+   }
+
+   unsigned long vector_field_generator::coord_to_index(vec3f coord, vec3 dim) {
+      return (coord[2] * (dim[1]*dim[0])) + (coord[1] * (dim[0])) + coord[0]; 
    }
 
    // RANDOM
@@ -116,20 +119,23 @@ namespace kraken {
    vector_field const vector_field_generator::tornado(vec3 const& dim) {
       
       unsigned long size = dim[0]*dim[1]*dim[2]*3;
+   
+      unsigned long count = dim[0]*dim[1]*dim[2];
 
       float* data = new float[size];
 
       unsigned long index = 0;
 
-      vec3f dl {{-1.0,0.0,-1.0}};
+      /*vec3f dl {{-1.0,0.0,-1.0}};
       vec3f dr {{-1.0,0.0, 1.0}};
       vec3f ul {{ 1.0,0.0,-1.0}};
       vec3f ur {{ 1.0,0.0, 1.0}};
 
       int leveldim = 0;
-      float step;
+      float step;*/
       
-      for(float z = 0 ; z > -dim[2] ; --z) {  
+      for(index = 0 ; index < count ; ++index) {
+      /*for(float z = 0 ; z > -dim[2] ; --z) {  
          for(float y = 0 ; y < dim[1] ; ++y) {  
             for(float x = 0 ; x < dim[0] ; ++x) {  
                
@@ -214,13 +220,18 @@ namespace kraken {
                   data[++index] = ul[1] * ( 1 - ( x * step ) + ur[1] * ( x * step) );
                   data[++index] = ul[2] * ( 1 - ( x * step ) + ur[2] * ( x * step) );
                   ++index;
-               }
-            }
-         }
+
+               
+               }*/
+
+                              
+               vec3f coords = index_to_coord(index, dim);
+               std::cout<<"index: "<<index<<" x: "<<coords[0]<<" y: "<<coords[1]<<" z: "<<coords[2]<<std::endl;
+            //}
+         //}
       }
 
       void* data_ptr = reinterpret_cast<void*> (data);
-            
       
       return vector_field(dim, data_ptr, 0, 1);
    }

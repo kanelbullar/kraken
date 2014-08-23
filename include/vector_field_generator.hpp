@@ -21,6 +21,7 @@ class vector_field_generator {
    public :
    
    vec3f index_to_coord(unsigned long, vec3);
+   unsigned long coord_to_index(vec3f, vec3);
    vector_field const random(vec3 const&);
    vector_field const one_direction(vec3 const&, direction_type);
    vector_field const sphere(vec3 const&, vec3f const&, sphere_type);
