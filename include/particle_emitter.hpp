@@ -5,6 +5,7 @@
 #include <array>
 #include <random>
 #include <iostream>
+#include <vector_field_generator.hpp>
 
 namespace kraken {
 
@@ -35,6 +36,7 @@ class particle_emitter {
    particles const raster(int, vec3 const&) const;
    particles const gauss(int, vec3 const&)  const;
    particles const random(int, vec3 const&) const;
+   particles const cube(int, vec3 const&, vec3 const&, kraken::direction_type);
 
    private:
 

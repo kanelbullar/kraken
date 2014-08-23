@@ -10,9 +10,9 @@ int main(int argc, char** argv) {
 
    kraken::vector_field_generator generator;
 
-   std::array<unsigned short,3> dim {20,20,20};
+   std::array<unsigned short,3> dim {8,8,8};
 
-   kraken::vector_field vf (generator.sphere(dim, std::array<float,3>{{10.0,10.0,10.0}}, kraken::INSIDE));
+   kraken::vector_field vf (generator.tornado(dim));
    //kraken::vector_field vf (generator.random(dim));
    //kraken::vector_field vf (generator.one_direction(dim,kraken::LEFT));
 

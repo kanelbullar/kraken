@@ -46,7 +46,7 @@ namespace kraken {
    }
 
 
-   //ONE DIRECTION
+   // ONE DIRECTION
    vector_field const vector_field_generator::
 
    one_direction(vec3 const& dim, direction_type type) {  
@@ -84,7 +84,7 @@ namespace kraken {
    }
 
 
-   //SPEHRE
+   // SPEHRE TODO: TYPE anpassen
    vector_field const vector_field_generator::
 
    sphere(vec3 const& dim, vec3f const& center, sphere_type type) {
@@ -108,6 +108,120 @@ namespace kraken {
 
       void* data_ptr = reinterpret_cast<void*> (data);
 
+      return vector_field(dim, data_ptr, 0, 1);
+   }
+
+
+   // TORNADO
+   vector_field const vector_field_generator::tornado(vec3 const& dim) {
+      
+      unsigned long size = dim[0]*dim[1]*dim[2]*3;
+
+      float* data = new float[size];
+
+      unsigned long index = 0;
+
+      vec3f dl {{-1.0,0.0,-1.0}};
+      vec3f dr {{-1.0,0.0, 1.0}};
+      vec3f ul {{ 1.0,0.0,-1.0}};
+      vec3f ur {{ 1.0,0.0, 1.0}};
+
+      int leveldim = 0;
+      float step;
+      
+      for(float z = 0 ; z > -dim[2] ; --z) {  
+         for(float y = 0 ; y < dim[1] ; ++y) {  
+            for(float x = 0 ; x < dim[0] ; ++x) {  
+               
+               if (dim[0]%2 != 0 && x == (dim[0]-1)/2 && abs(z) == (dim[0]-1)/2) {
+                  data[index]   = 0.0;
+                  data[++index] = 0.0;
+                  data[++index] = 0.0;
+                  ++index;
+               }
+
+               // DOWN LEFT DIAGONAL               
+               else if(abs(z) == x && abs(z) < (dim[2] / 2) && x < (dim[0] / 2) ) {
+                  data[index]   = dl[0];
+                  data[++index] = dl[1];
+                  data[++index] = dl[2];
+                  ++index;
+               }
+
+               // UP RIGHT DIAGONAL
+               else if(abs(z) == x && x > (dim[0] / 2) && abs(z) > (dim[2] / 2 ) ) {
+                  data[index]   = ur[0];
+                  data[++index] = ur[1];
+                  data[++index] = ur[2];
+                  ++index;
+               }
+
+               // UP LEFT DIAGONAL
+               else if(abs(z) == dim[0] - x) {
+                  data[index]   = ul[0];
+                  data[++index] = ul[1];
+                  data[++index] = ul[2];
+                  ++index;
+               }
+
+               // DOWN RIGHT DIAGONAL
+               else if(x == dim[2] - abs(z)) {
+                  data[index]   = dr[0];
+                  data[++index] = dr[1];
+                  data[++index] = dr[2];
+                  ++index;
+               }
+                  
+               // LEFT TRIANGLE
+               else if(abs(z) > x && x < (dim[0] / 2) ) {
+                  leveldim = dim[2] - ( 2 * x );
+                  std::cout<<"index: "<<index/3<<" leveldim: "<<leveldim<<" LT"<<std::endl;
+                  step = 1/(leveldim-1);
+                  data[index]   = dl[0] * ( 1 - ( abs(z) * step ) + ul[0] * ( abs(z) * step) );
+                  data[++index] = dl[1] * ( 1 - ( abs(z) * step ) + ul[1] * ( abs(z) * step) );
+                  data[++index] = dl[2] * ( 1 - ( abs(z) * step ) + ul[2] * ( abs(z) * step) );
+                  ++index;
+               }
+
+               // DOWN TRIANGLE
+               else if(x > abs(z) && abs(z) < (dim[2] / 2) ) {
+                  leveldim = dim[0] - ( 2 * abs(z) );
+                  std::cout<<"index: "<<index/3<<" leveldim: "<<leveldim<<" DT"<<std::endl;
+                  step = 1/(leveldim-1);
+                  data[index]   = dl[0] * ( 1 - ( x * step ) + dr[0] * ( x * step) );
+                  data[++index] = dl[1] * ( 1 - ( x * step ) + dr[1] * ( x * step) );
+                  data[++index] = dl[2] * ( 1 - ( x * step ) + dr[2] * ( x * step) );
+                  ++index;
+               }
+
+               // RIGHT TRIANGLE
+               else if(x > abs(z) && x > (dim[0] / 2) ) {
+                  leveldim = dim[2] - ( dim[0] - x ) * 2;
+                  std::cout<<"index: "<<index/3<<" leveldim: "<<leveldim<<" RT"<<std::endl;
+                  step = 1/(leveldim-1);
+                  data[index]   = dr[0] * ( 1 - ( abs(z) * step ) + ur[0] * ( abs(z) * step) );
+                  data[++index] = dr[1] * ( 1 - ( abs(z) * step ) + ur[1] * ( abs(z) * step) );
+                  data[++index] = dr[2] * ( 1 - ( abs(z) * step ) + ur[2] * ( abs(z) * step) );
+                  ++index;
+               }
+
+               // UP TRIANGLE
+               else if(abs(z) > x && abs(z) > (dim[2] / 2) ) {
+                  leveldim = dim[0] - ( dim[2] - abs(z) ) * 2;
+                  std::cout<<"index: "<<index/3<<" leveldim: "<<leveldim<<" UT"<<std::endl;
+                  step = 1/(leveldim-1);
+                  data[index]   = ul[0] * ( 1 - ( x * step ) + ur[0] * ( x * step) );
+                  data[++index] = ul[1] * ( 1 - ( x * step ) + ur[1] * ( x * step) );
+                  data[++index] = ul[2] * ( 1 - ( x * step ) + ur[2] * ( x * step) );
+                  ++index;
+               }
+            }
+         }
+      }
+
+      void* data_ptr = reinterpret_cast<void*> (data);
+            
+      
       return vector_field(dim, data_ptr, 0, 1);
    }
 

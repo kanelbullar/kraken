@@ -136,7 +136,8 @@ void gl_config::load_default(vector_field const& vf) {
 
    particle_emitter emitter;
    
-   particles pos(emitter.raster(10,vf.dim_));
+   particles pos(emitter.raster(8,vf.dim_));
+   //particles pos(emitter.raster(20,std::array<unsigned short,3>{{3,3,3}},std::array<unsigned short,3>{{4,4,4}},kraken::RIGHT));
 
    particle_number_ = pos.size_ / (3 * sizeof(float));
 
