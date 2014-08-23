@@ -2,6 +2,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 
 #include <config.hpp>
+#include <particle_emitter.hpp>
 
 
 namespace kraken {
@@ -17,23 +18,6 @@ init(float aspect_ratio) {
 
    init_programs();
    init_uniforms(aspect_ratio);
-
-   GLuint vbo,vao;
-
-   float center[] = {0.0,0.0,0.0};
-
-   glGenBuffers(1,&vbo);
-   glGenVertexArrays(1,&vao);
-
-   glBindBuffer(GL_ARRAY_BUFFER,vbo);
-
-   glBufferData(GL_ARRAY_BUFFER,sizeof(center),&center[0],GL_STATIC_DRAW);
-   glBindVertexArray(vao);
-
-   GLint attr_pos(glGetAttribLocation(1,"pos"));
-
-   glEnableVertexAttribArray(attr_pos);
-   glVertexAttribPointer(attr_pos,3,GL_FLOAT,GL_FALSE,0,0);
 }
 
 
@@ -41,10 +25,13 @@ void config::
 
 display() {
 
+   pipeline_.enable("glyph");
    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-   glDrawArrays(GL_POINTS,0,10);
+   glDrawArrays(GL_POINTS,0,particle_number_);
    glutSwapBuffers();
    glutPostRedisplay();
+   
+   ++frame_number_;
 }
 
 
@@ -62,6 +49,18 @@ key(unsigned char key,int x,int y) {
    }
 }
 
+void config::time(int init) {
+
+   unsigned short fps(4*frame_number_);
+
+   std::string new_title("Release the kraken!   |   FPS : ");
+   new_title.append(std::to_string(fps));
+
+   glutSetWindowTitle(new_title.c_str());
+   frame_number_ = 0;
+
+   glutTimerFunc(250,time,0);
+}
 
 void config::
 
@@ -85,7 +84,6 @@ init_programs() {
    pipeline_.link_programs();
 }
 
-
 void config::
 
 init_uniforms(float aspect_ratio) {
@@ -96,11 +94,8 @@ init_uniforms(float aspect_ratio) {
 
    view[3][2] = -25.0f;
 
-   glm::ivec3 dim(20,20,20);
-
    pipeline_.uniforms_.set("projection",projection);
    pipeline_.uniforms_.set("view",view);
-   pipeline_.uniforms_.set("dim",dim);
 
    pipeline_.set_link("glyph","projection");
    pipeline_.set_link("glyph","view");
@@ -108,12 +103,66 @@ init_uniforms(float aspect_ratio) {
    pipeline_.set_link("streamline","view");
    pipeline_.set_link("bounding_box","projection");
    pipeline_.set_link("bounding_box","view");
-   pipeline_.set_link("bounding_box","dim");
-
-   pipeline_.enable("bounding_box");
 }
 
+void config::bind_field(vector_field const& vf) {
+   
+   // particle loading 
+   GLuint vbo,vao;
+
+   particle_emitter emitter;
+   
+   particles pos(emitter.raster(20,vf.dim_));
+
+   particle_number_ = pos.size_ / (3 * sizeof(float));
+
+   glGenBuffers(1,&vbo);
+   glGenVertexArrays(1,&vao);
+
+   glBindBuffer(GL_ARRAY_BUFFER,vbo);
+
+   glBufferData(GL_ARRAY_BUFFER,pos.size_,pos.data_,GL_STATIC_DRAW);
+   glBindVertexArray(vao);
+
+   GLint attr_pos(glGetAttribLocation(1,"pos"));
+
+   glEnableVertexAttribArray(attr_pos);
+   glVertexAttribPointer(attr_pos,3,GL_FLOAT,GL_FALSE,0,0);
+
+   float border_color[] = {0.0f,0.0f,0.0f,1.0f};
+
+   GLuint tex_id;
+   glGenTextures(1, &tex_id);
+   glEnable(GL_TEXTURE_3D);
+   glActiveTexture(GL_TEXTURE0);
+   glBindTexture(GL_TEXTURE_3D, tex_id);
+   glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+   glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+   glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
+   glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
+   glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_BORDER);
+   glTexParameterfv(GL_TEXTURE_3D, GL_TEXTURE_BORDER_COLOR, border_color);
+   glTexImage3D(GL_TEXTURE_3D, 0, GL_RGB32F, 
+                vf.dim_[0], vf.dim_[1], vf.dim_[2], 0, GL_RGB, 
+                GL_FLOAT, vf.data_);
+
+   glm::vec3 lightpos(0.0,0.0,5.0);
+   pipeline_.uniforms_.set("lightpos", lightpos);
+   pipeline_.set_link("glyph","lightpos");
+
+   glm::vec2 interval(vf.min_,vf.max_);
+   pipeline_.uniforms_.set("interval", interval);
+   pipeline_.set_link("glyph","interval");
+   pipeline_.set_link("streamline","interval");
+
+   glm::ivec3 dim(vf.dim_[0],vf.dim_[1],vf.dim_[2]);
+   pipeline_.uniforms_.set("dim", dim);
+   pipeline_.set_link("glyph","dim");
+   pipeline_.set_link("streamline","dim");
+   pipeline_.set_link("bounding_box","dim");
+}
 
 pipeline config::pipeline_ = pipeline();
-
+unsigned short config::frame_number_    = 0;
+unsigned short config::particle_number_ = 0;
 }

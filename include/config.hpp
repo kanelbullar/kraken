@@ -2,6 +2,7 @@
 #define KRAKEN_CONFIG
 
 #include <pipeline.hpp>
+#include <vector_field.hpp>
 
 #include <GL/freeglut.h>
 
@@ -17,6 +18,10 @@ class config {
 
    static void key(unsigned char,int,int);
 
+   static void time(int);
+
+   static void bind_field(vector_field const&);
+
 
    private :
 
@@ -26,6 +31,10 @@ class config {
 
 
    static pipeline pipeline_;
+
+   static unsigned short frame_number_;
+
+   static unsigned short particle_number_;
 };
 
 }
