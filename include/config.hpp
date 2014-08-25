@@ -29,6 +29,8 @@ class config {
 
    static void init_uniforms(float);
 
+   static void init_texture(vector_field const&);
+
 
    static pipeline pipeline_;
 

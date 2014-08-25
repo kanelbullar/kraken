@@ -55,12 +55,12 @@ load(uniform_link const& ul) const {
       }
     }
 
-    else {
+    /*else {
 
       std::cerr << std::endl
                 << "uniform [" << uniform_name << "] isn't bound"
                 << std::endl;
-    }
+    }*/
   }
 
   else {

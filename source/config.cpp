@@ -94,11 +94,19 @@ init_uniforms(float aspect_ratio) {
 
    view[3][2] = -25.0f;
 
+   glm::mat4 dir_transform(glm::transpose(glm::inverse(view)));
+
+   glm::vec3 lightpos(0.0,0.0,5.0);
+
    pipeline_.uniforms_.set("projection",projection);
    pipeline_.uniforms_.set("view",view);
+   pipeline_.uniforms_.set("dir_transform",dir_transform);
+   pipeline_.uniforms_.set("lightpos", lightpos);
 
    pipeline_.set_link("glyph","projection");
    pipeline_.set_link("glyph","view");
+   pipeline_.set_link("glyph","dir_transform");
+   pipeline_.set_link("glyph","lightpos");
    pipeline_.set_link("streamline","projection");
    pipeline_.set_link("streamline","view");
    pipeline_.set_link("bounding_box","projection");
@@ -107,7 +115,6 @@ init_uniforms(float aspect_ratio) {
 
 void config::bind_field(vector_field const& vf) {
    
-   // particle loading 
    GLuint vbo,vao;
 
    particle_emitter emitter;
@@ -129,26 +136,6 @@ void config::bind_field(vector_field const& vf) {
    glEnableVertexAttribArray(attr_pos);
    glVertexAttribPointer(attr_pos,3,GL_FLOAT,GL_FALSE,0,0);
 
-   float border_color[] = {0.0f,0.0f,0.0f,1.0f};
-
-   GLuint tex_id;
-   glGenTextures(1, &tex_id);
-   glEnable(GL_TEXTURE_3D);
-   glActiveTexture(GL_TEXTURE0);
-   glBindTexture(GL_TEXTURE_3D, tex_id);
-   glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-   glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-   glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
-   glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
-   glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_BORDER);
-   glTexParameterfv(GL_TEXTURE_3D, GL_TEXTURE_BORDER_COLOR, border_color);
-   glTexImage3D(GL_TEXTURE_3D, 0, GL_RGB32F, 
-                vf.dim_[0], vf.dim_[1], vf.dim_[2], 0, GL_RGB, 
-                GL_FLOAT, vf.data_);
-
-   glm::vec3 lightpos(0.0,0.0,5.0);
-   pipeline_.uniforms_.set("lightpos", lightpos);
-   pipeline_.set_link("glyph","lightpos");
 
    glm::vec2 interval(vf.min_,vf.max_);
    pipeline_.uniforms_.set("interval", interval);
@@ -160,6 +147,35 @@ void config::bind_field(vector_field const& vf) {
    pipeline_.set_link("glyph","dim");
    pipeline_.set_link("streamline","dim");
    pipeline_.set_link("bounding_box","dim");
+
+
+   init_texture(vf);
+}
+
+void config::
+
+init_texture(vector_field const& vf) {
+
+   float border_color[] = {0.0f,0.0f,0.0f,1.0f};
+
+   GLuint tex_id;
+   glGenTextures(1, &tex_id);
+
+   glEnable(GL_TEXTURE_3D);
+   glActiveTexture(GL_TEXTURE0);
+
+   glBindTexture(GL_TEXTURE_3D, tex_id);
+
+   glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+   glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+   glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
+   glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
+   glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_BORDER);
+   glTexParameterfv(GL_TEXTURE_3D, GL_TEXTURE_BORDER_COLOR, border_color);
+
+   glTexImage3D(GL_TEXTURE_3D, 0, GL_RGB32F, 
+                vf.dim_[0], vf.dim_[1], vf.dim_[2],
+                0, GL_RGB, GL_FLOAT, vf.data_);
 }
 
 pipeline config::pipeline_ = pipeline();

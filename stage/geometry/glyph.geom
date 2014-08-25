@@ -3,47 +3,85 @@
 layout(points) in;
 layout(triangle_strip,max_vertices = 78) out;
 
+// tranformation
 uniform mat4 projection;
 uniform mat4 view;
+uniform mat4 dir_tranform;
+
+// light
 uniform vec3 lightpos;
+
+// vector field
 uniform vec2 interval;
 uniform ivec3 dim;
 uniform sampler3D vf;
 
+// shading
 out vec3 normal;
 out vec3 light;
 out vec3 color;
 
+
+// find orthogonal plane vector
+vec3 orthogonal(vec3 n) {
+
+   vec3 o;
+
+   // n isn't collinear to (1.0,0.0,0.0)
+   if(n.y != 0.0 || n.z != 0.0) {
+
+      o = cross(n,vec3(1.0,0.0,0.0));
+   }
+
+   else {
+
+      o = vec3(0.0,n.x,0.0);
+   }
+
+   return o;
+}
+
+// calc normal for the mantle geometry
+vec3 mantle_normal(vec3 pos) {
+
+   vec4 mn = vec4(pos - gl_in[0].gl_Position.xyz,0.0);
+
+   //mn = dir_tranform * mn;
+
+   return normalize(mn.xyz);
+}
+
+// calc normal for the base geometry
+vec3 base_normal(vec3 n) {
+
+   vec4 bn = vec4(-n,0.0);
+
+   //bn = dir_tranform * bn;
+
+   return normalize(bn.xyz);
+}
+
+// calc normalized vector from lightsource to surface position
+vec3 surface_light(vec3 pos) {
+
+   vec4 l = vec4(pos - lightpos,0.0);
+
+   //l = dir_tranform * l;
+
+   return normalize(l.xyz);
+}
+
+// map normal length to color
 vec3 transfer(float absolute) {
    
    vec3 c_min = vec3(0.0,0.0,1.0),
         c_max = vec3(1.0,0.0,0.0);
 
-   float range = interval[1] - interval[0];
-
-   float weight = (absolute - interval[0]) / range;
+   float weight = (absolute - interval[0]) / (interval[1] - interval[0]);
 
    return  (1.0 - weight) * c_min + weight * c_max;
 }
 
-// find any orthogonal vector
-vec3 orthogonal(vec3 n) {
-
-   vec3 p;
-
-   // n isn't collinear to (1.0,0.0,0.0)
-   if(n.y != 0.0 || n.z != 0.0) {
-
-      p = cross(n,vec3(1.0,0.0,0.0));
-   }
-
-   else {
-
-      p = vec3(0.0,n.x,0.0);
-   }
-
-   return p;
-}
 
 void main() {
 
@@ -83,52 +121,67 @@ void main() {
 
          // begin : mantle triangle
          v_pos  = p_pos + cos(rad) * u + sin(rad) * v;
-         normal = normalize(v_pos - p_pos);
-         light  = normalize(v_pos - lightpos);
-         color = geom_color;
-         gl_Position = perspective_view * vec4(v_pos,1.0);
-         EmitVertex();
+         normal = mantle_normal(v_pos);
+         light  = surface_light(v_pos);
+         color  = geom_color;
+
          pos_mantle[0]   = v_pos;
          light_mantle[0] = light;
-      
-         v_pos   = p_pos + cos(rad+rad_increment) * u 
-                         + sin(rad+rad_increment) * v;
-         normal  = normalize(v_pos - p_pos);
-         light   = normalize(v_pos - lightpos);
-         color = geom_color;
+
          gl_Position = perspective_view * vec4(v_pos,1.0);
          EmitVertex();
+
+      
+         v_pos  = p_pos + cos(rad+rad_increment) * u 
+                         + sin(rad+rad_increment) * v;
+         normal = mantle_normal(v_pos);
+         light  = surface_light(v_pos);
+         color  = geom_color;
+
          pos_mantle[1]   = v_pos;
          light_mantle[1] = light;
 
-         v_pos   = p_pos + n;
-         normal  = normalize(v_pos - p_pos);
-         light   = normalize(v_pos - lightpos);
-         color = geom_color;
          gl_Position = perspective_view * vec4(v_pos,1.0);
          EmitVertex();
+
+
+         v_pos  = p_pos + n;
+         normal = mantle_normal(v_pos);
+         light  = surface_light(v_pos);
+         color  = geom_color;
+
+         gl_Position = perspective_view * vec4(v_pos,1.0);
+         EmitVertex();
+
          EndPrimitive();
          // end : mantle triangle
 
 
          // begin : base triangle
-         normal = -n;
+
+         vec3 bn = base_normal(n);
+
+         normal = bn;
          light  = light_mantle[0];
-         color = geom_color;
+         color  = geom_color;
+
          gl_Position = perspective_view * vec4(pos_mantle[0],1.0);
          EmitVertex();
 
-         normal = -n;
-         light = light_mantle[1];
-         color = geom_color;
+         normal = bn;
+         light  = light_mantle[1];
+         color  = geom_color;
+
          gl_Position = perspective_view * vec4(pos_mantle[1],1.0);
          EmitVertex();
 
-         normal = -n;
-         light  = p_pos - lightpos;
-         color = geom_color;
+         normal = bn;
+         light  = surface_light(p_pos);
+         color  = geom_color;
+
          gl_Position = perspective_view * vec4(p_pos,1.0);
          EmitVertex();
+
          EndPrimitive();
          // end : base triangle
       }
