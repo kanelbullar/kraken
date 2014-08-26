@@ -46,13 +46,19 @@ open(vector_field const& vf) {
 
          aspect_ratio /= res_[1];
 
-         config::init(aspect_ratio);
-         config::bind_field(vf);
+         // register callback functions
          glutDisplayFunc(config::display);
          glutKeyboardFunc(config::key);
-         glutTimerFunc(250,config::time,0);
+         glutTimerFunc(0,config::time,0);
+
+         // init config
+         config::init(aspect_ratio);
+         config::bind_field(vf);
 
          glutMainLoop();
+
+         // clear buffer
+         config::clear();
          glutExit();
       }
    }

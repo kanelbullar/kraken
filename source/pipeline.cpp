@@ -138,6 +138,8 @@ void pipeline::
 
 link_programs() {
 
+  glUseProgram(0);
+
   for(auto p_it(programs_.begin()) ; p_it != programs_.end() ; ++p_it) {
 
     p_it->link();

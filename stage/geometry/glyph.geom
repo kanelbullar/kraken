@@ -6,7 +6,7 @@ layout(triangle_strip,max_vertices = 78) out;
 // tranformation
 uniform mat4 projection;
 uniform mat4 view;
-uniform mat4 dir_tranform;
+//uniform mat4 dir_tranform;
 
 // light
 uniform vec3 lightpos;

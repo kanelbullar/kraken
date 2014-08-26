@@ -12,9 +12,9 @@ namespace kraken {
 
       std::vector<pos3> particle;
       
-      for(float z = -(dim[2]/2); z < dim[2]/2; z+=dim[2]/number_f) {
-         for(float y = -(dim[1]/2); y < dim[1]/2; y+=dim[1]/number_f) {
-            for(float x = -(dim[0]/2); x < dim[0]/2; x+=dim[0]/number_f) {
+      for(float z = -(dim[2]/2); z <= dim[2]/2; z+=dim[2]/number_f) {
+         for(float y = -(dim[1]/2); y <= dim[1]/2; y+=dim[1]/number_f) {
+            for(float x = -(dim[0]/2); x <= dim[0]/2; x+=dim[0]/number_f) {
               
                particle.push_back(pos3{{x,y,z}});
             }
