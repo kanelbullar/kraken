@@ -84,6 +84,10 @@ key(unsigned char key,int x,int y) {
 
       case  27 : glutLeaveMainLoop(); break;
 
+      case  43 : depth_ += 0.5f; init_perspective(); switch_ = true; break;
+
+      case  45 : depth_ -= 0.5f; init_perspective(); switch_ = true; break;
+
       case  49 : program_ = "glyph"; switch_ = true ; break;
 
       case  50 : program_ = "streamline"; switch_ = true; break;
@@ -127,7 +131,14 @@ time(int init) {
    glutTimerFunc(250,time,0);
 }
 
+void config::resize(int width, int height) {
+   
+   aspect_ratio_ = static_cast<float> (width) / height;
+   init_perspective();
+   glViewport(0, 0, width, height);
+   switch_ = true;
 
+}
 
 // support functions
 void config::

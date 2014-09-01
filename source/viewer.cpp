@@ -51,6 +51,7 @@ open(vector_field const& vf) {
          glutKeyboardFunc(config::key);
          glutSpecialFunc(config::special_key);
          glutTimerFunc(0,config::time,0);
+         glutReshapeFunc(config::resize);
 
          // init config
          config::init(aspect_ratio);

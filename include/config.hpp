@@ -22,6 +22,8 @@ class config {
 
    static void time(int);
 
+   static void resize(int,int);
+
 
    // support functions
 
