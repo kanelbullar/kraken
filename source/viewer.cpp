@@ -49,6 +49,7 @@ open(vector_field const& vf) {
          // register callback functions
          glutDisplayFunc(config::display);
          glutKeyboardFunc(config::key);
+         glutSpecialFunc(config::special_key);
          glutTimerFunc(0,config::time,0);
 
          // init config

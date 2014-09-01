@@ -18,6 +18,8 @@ class config {
 
    static void key(unsigned char,int,int);
 
+   static void special_key(int,int,int);
+
    static void time(int);
 
 
@@ -34,7 +36,9 @@ class config {
 
    static void init_programs();
 
-   static void init_uniforms(float);
+   static void init_uniforms();
+
+   static void init_perspective();
 
    static void init_memory(std::array<unsigned short,3> const&);
 
@@ -54,6 +58,12 @@ class config {
    static unsigned short frame_number_;
 
    static unsigned short particle_number_;
+
+   static float aspect_ratio_;
+
+   static float depth_;
+
+   static std::array<float,2> rot_;
 
    static bool dirty_ , bbox_ , switch_;
 

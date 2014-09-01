@@ -19,9 +19,14 @@ GLuint config::tex_id_ = 0;
 unsigned short config::frame_number_    = 0;
 unsigned short config::particle_number_ = 0;
 
+float config::aspect_ratio_ = 0.0f;
+float config::depth_ = -35.0f;
+
+std::array<float,2> config::rot_ = {{0.0f,0.0f}};
+
 bool config::dirty_ = true;
 
-bool config::bbox_ = true;
+bool config::bbox_ = false;
 
 bool config::switch_ = true;
 
@@ -92,6 +97,23 @@ key(unsigned char key,int x,int y) {
 
 void config::
 
+special_key(int key_id,int x,int y) {
+
+   switch(key_id) {
+
+      case 100 : rot_[1] -= 0.01f; init_perspective(); switch_ = true; break;
+
+      case 101 : rot_[0] -= 0.01f; init_perspective(); switch_ = true; break;
+
+      case 102 : rot_[1] += 0.01f; init_perspective(); switch_ = true; break;
+
+      case 103 : rot_[0] += 0.01f; init_perspective(); switch_ = true; break;
+   }
+}
+
+
+void config::
+
 time(int init) {
 
    unsigned short fps(4 * frame_number_);
@@ -114,11 +136,12 @@ init(float aspect_ratio) {
 
    glEnable(GL_DEPTH_TEST);
    glEnable(GL_MULTISAMPLE_ARB);
-
    glClearColor(0.2,0.2,0.2,1.0);
 
+   aspect_ratio_ = aspect_ratio;
+
    init_programs();
-   init_uniforms(aspect_ratio);
+   init_uniforms();
 }
 
 
@@ -184,26 +207,37 @@ init_programs() {
 
 void config::
 
-init_uniforms(float aspect_ratio) {
-
-   glm::mat4 projection(glm::perspective(45.0f,aspect_ratio,1.0f,100.0f)),
-
-             view(1.0);
-
-   view[3][2] = -35.0f;
-
-   glm::mat4 perspective_view(projection * view);
+init_uniforms() {
 
    glm::vec3 lightpos(0.0,0.0,5.0);
 
-
-   pipeline_.uniforms_.set("perspective_view",perspective_view);
    pipeline_.uniforms_.set("lightpos", lightpos);
+
+   init_perspective();
 
    pipeline_.set_link("glyph","perspective_view");
    pipeline_.set_link("glyph","lightpos");
    pipeline_.set_link("streamline","perspective_view");
    pipeline_.set_link("bounding_box","perspective_view");
+}
+
+
+void config::
+
+init_perspective() {
+
+   glm::mat4 projection(glm::perspective(45.0f,aspect_ratio_,1.0f,100.0f)),
+
+             view(glm::rotate(glm::mat4(),rot_[0],glm::vec3(1.0f,0.0f,0.0f)));
+
+   view = glm::rotate(view,rot_[1],glm::vec3(0.0f,1.0f,0.0f));
+
+   view[3][2] = depth_;
+
+   glm::mat4 perspective_view(projection * view);
+
+   pipeline_.uniforms_.set("perspective_view",perspective_view);
+
 }
 
 
