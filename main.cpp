@@ -11,7 +11,7 @@ int main(int argc,char** argv) {
 
    v.init(argc,argv);
 
-   v.open(generator.one_direction(dim,kraken::LEFT));
+   v.open(generator.random(dim));
 
    return 0;
 }
