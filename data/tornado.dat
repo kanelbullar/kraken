@@ -1,0 +1,4 @@
+ObjectFileName:  tornado.raw
+Resolution:      128 128 128
+Format:          FLOAT3
+SliceThickness:  1 1 1

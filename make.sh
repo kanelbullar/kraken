@@ -1,4 +1,4 @@
-g++ main.cpp\
+clang++ main.cpp\
  source/config.cpp\
  source/particle_emitter.cpp\
  source/pipeline.cpp\
@@ -9,6 +9,7 @@ g++ main.cpp\
  source/vector_field.cpp\
  source/vector_field_generator.cpp\
  source/viewer.cpp\
+ source/vector_field_loader.cpp\
  -omain\
  -std=c++11\
  -Wall\

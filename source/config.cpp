@@ -20,7 +20,7 @@ unsigned short config::frame_number_    = 0;
 unsigned short config::particle_number_ = 0;
 
 float config::aspect_ratio_ = 0.0f;
-float config::depth_ = -35.0f;
+float config::depth_ = -300.0f;
 
 std::array<float,2> config::rot_ = {{0.0f,0.0f}};
 
@@ -30,7 +30,7 @@ bool config::bbox_ = false;
 
 bool config::switch_ = true;
 
-std::string config::program_ = "glyph";
+std::string config::program_ = "streamline";
 
 
 // callback functions
@@ -237,7 +237,7 @@ void config::
 
 init_perspective() {
 
-   glm::mat4 projection(glm::perspective(45.0f,aspect_ratio_,1.0f,100.0f)),
+   glm::mat4 projection(glm::perspective(45.0f,aspect_ratio_,1.0f,500.0f)),
 
              view(glm::rotate(glm::mat4(),rot_[0],glm::vec3(1.0f,0.0f,0.0f)));
 
@@ -261,7 +261,7 @@ init_memory(std::array<unsigned short,3> const& dim) {
    // generate particles
    particle_emitter emitter;
    
-   particles pos(emitter.raster(10,dim));
+   particles pos(emitter.raster(40,dim));
 
    particle_number_ = pos.size_ / (3 * sizeof(float));
 

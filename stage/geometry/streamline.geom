@@ -1,6 +1,6 @@
 #version 330
 
-#define base_number 50
+#define base_number 10
 
 layout (points) in;
 layout (line_strip,max_vertices = base_number) out;
