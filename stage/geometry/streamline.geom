@@ -5,8 +5,7 @@
 layout (points) in;
 layout (line_strip,max_vertices = base_number) out;
 
-uniform mat4 projection;
-uniform mat4 view;
+uniform mat4 perspective_view;
 uniform ivec3 dim;
 uniform vec2 interval;
 uniform sampler3D vf;
@@ -28,7 +27,6 @@ vec3 transfer(float absolute) {
 void main () {
 
    const float step_width = 0.1;
-   mat4 perspective_view = projection * view;
 
    vec3 p_pos = gl_in[0].gl_Position.xyz,
         t_pos = p_pos;
@@ -37,9 +35,9 @@ void main () {
       
       t_pos = p_pos;
    
-      t_pos[0] = (t_pos[0] + dim[0] / 2) / dim[0];
-      t_pos[1] = (t_pos[1] + dim[1] / 2) / dim[1];
-      t_pos[2] = (t_pos[2] + dim[2] / 2) / dim[2];
+      t_pos[0] = (t_pos[0] + float(dim[0]) / 2) / dim[0];
+      t_pos[1] = (t_pos[1] + float(dim[1]) / 2) / dim[1];
+      t_pos[2] = (t_pos[2] + float(dim[2]) / 2) / dim[2];
 
       vec3 n = texture(vf,t_pos).rgb;
       if(length(n) == 0) break;

@@ -192,23 +192,18 @@ init_uniforms(float aspect_ratio) {
 
    view[3][2] = -35.0f;
 
-   //glm::mat4 dir_transform(glm::transpose(glm::inverse(view)));
+   glm::mat4 perspective_view(projection * view);
 
    glm::vec3 lightpos(0.0,0.0,5.0);
 
-   pipeline_.uniforms_.set("projection",projection);
-   pipeline_.uniforms_.set("view",view);
-   //pipeline_.uniforms_.set("dir_transform",dir_transform);
+
+   pipeline_.uniforms_.set("perspective_view",perspective_view);
    pipeline_.uniforms_.set("lightpos", lightpos);
 
-   pipeline_.set_link("glyph","projection");
-   pipeline_.set_link("glyph","view");
-   //pipeline_.set_link("glyph","dir_transform");
+   pipeline_.set_link("glyph","perspective_view");
    pipeline_.set_link("glyph","lightpos");
-   pipeline_.set_link("streamline","projection");
-   pipeline_.set_link("streamline","view");
-   pipeline_.set_link("bounding_box","projection");
-   pipeline_.set_link("bounding_box","view");
+   pipeline_.set_link("streamline","perspective_view");
+   pipeline_.set_link("bounding_box","perspective_view");
 }
 
 

@@ -3,24 +3,21 @@
 layout(points) in;
 layout(line_strip,max_vertices = 20) out;
 
-uniform mat4  projection;
-uniform mat4  view;
+uniform mat4  perspective_view;
 uniform ivec3 dim;
 
 void main() {
-
-   mat4 perspective_view = projection * view;
 
    vec3 p_pos = gl_in[0].gl_Position.xyz;
    
    float plane[6];
 
-   plane[0] = p_pos[0] - dim[0] / 2;
-   plane[1] = p_pos[0] + dim[0] / 2;
-   plane[2] = p_pos[1] - dim[1] / 2;
-   plane[3] = p_pos[1] + dim[1] / 2;
-   plane[4] = p_pos[2] - dim[2] / 2;
-   plane[5] = p_pos[2] + dim[2] / 2;
+   plane[0] = p_pos[0] - dim[0] / 2.0;
+   plane[1] = p_pos[0] + dim[0] / 2.0;
+   plane[2] = p_pos[1] - dim[1] / 2.0;
+   plane[3] = p_pos[1] + dim[1] / 2.0;
+   plane[4] = p_pos[2] - dim[2] / 2.0;
+   plane[5] = p_pos[2] + dim[2] / 2.0;
 
    vec4 corner[8];
 
