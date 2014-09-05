@@ -10,6 +10,7 @@ clang++ main.cpp\
  source/vector_field_generator.cpp\
  source/viewer.cpp\
  source/vector_field_loader.cpp\
+ source/transfer_function.cpp\
  -omain\
  -std=c++11\
  -Wall\
