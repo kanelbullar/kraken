@@ -14,7 +14,7 @@ std::array<GLuint,2> config::buffer_ = {{0,0}};
 
 std::array<GLuint,2> config::array_ptr_ = {{0,0}};
 
-GLuint config::tex_id_ = 0;
+std::array<GLuint,2> config::tex_id_ = {{0,0}};
 
 unsigned short config::frame_number_    = 0;
 unsigned short config::particle_number_ = 0;
@@ -43,6 +43,16 @@ display() {
       if(switch_) {
 
          pipeline_.enable(program_);
+
+         if(program_.compare("glyph")) {
+
+            glEnable(GL_DEPTH_TEST);
+         }
+
+         else if(program_.compare("streamline")) {
+
+            glDisable(GL_DEPTH_TEST);
+         }
 
          switch_ = false;
       }
@@ -145,7 +155,9 @@ void config::
 
 init(float aspect_ratio) {
 
-   glEnable(GL_DEPTH_TEST);
+   glEnable(GL_BLEND);
+   glBlendFunc(GL_SRC_ALPHA,GL_ONE);
+   //glEnable(GL_DEPTH_TEST);
    glEnable(GL_MULTISAMPLE_ARB);
    glClearColor(0.2,0.2,0.2,1.0);
 
@@ -173,6 +185,33 @@ void config::bind_field(vector_field const& vf) {
    init_texture(vf);
 }
 
+void config::bind_transfer_function(transfer_function const& tf) {
+
+   glUseProgram(2);
+   
+   float* data = tf.finish();
+   GLvoid* data_ptr = reinterpret_cast<GLvoid*>(data);
+
+   float border_color[] = {1.0f,0.0f,0.0f,0.0f};
+
+   glGenTextures(1, &tex_id_[0]);
+
+   glActiveTexture(GL_TEXTURE0);
+
+   glEnable(GL_TEXTURE_1D);
+
+   glBindTexture(GL_TEXTURE_1D, tex_id_[0]);
+
+   glTexParameteri(GL_TEXTURE_1D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+   glTexParameteri(GL_TEXTURE_1D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+   glTexParameteri(GL_TEXTURE_1D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
+   glTexParameterfv(GL_TEXTURE_1D, GL_TEXTURE_BORDER_COLOR, border_color);
+
+   glTexImage1D(GL_TEXTURE_1D, 0, GL_RGBA32F,
+                100, 0, GL_RGBA, GL_FLOAT, data_ptr);
+
+   glUniform1i(glGetUniformLocation(2,"tf"),0);
+}
 
 void config::clear() {
 
@@ -190,7 +229,12 @@ void config::clear() {
       glDeleteBuffers(1,&id);
    }
 
-   glDeleteTextures(1,&tex_id_);
+   for(auto it(tex_id_.begin()) ; it != tex_id_.end() ; ++it) {
+
+      GLuint id(*it);
+
+      glDeleteTextures(1,&id);
+   }
 }
 
 
@@ -318,14 +362,16 @@ void config::
 
 init_texture(vector_field const& vf) {
 
-   float border_color[] = {0.0f,0.0f,0.0f,1.0f};
+   glUseProgram(2);
 
-   glGenTextures(1, &tex_id_);
+   float border_color[] = {0.0f,0.0f,0.0f,0.0f};
 
+   glGenTextures(1, &tex_id_[1]);
+
+   glActiveTexture(GL_TEXTURE1);
    glEnable(GL_TEXTURE_3D);
-   glActiveTexture(GL_TEXTURE0);
 
-   glBindTexture(GL_TEXTURE_3D, tex_id_);
+   glBindTexture(GL_TEXTURE_3D, tex_id_[1]);
 
    glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
    glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
@@ -337,6 +383,9 @@ init_texture(vector_field const& vf) {
    glTexImage3D(GL_TEXTURE_3D, 0, GL_RGB32F,
                 vf.dim_[0], vf.dim_[1], vf.dim_[2],
                 0, GL_RGB, GL_FLOAT, vf.data_);
+
+   glUniform1i(glGetUniformLocation(1,"vf"),1);
+   glUniform1i(glGetUniformLocation(2,"vf"),1);
 }
 
 }

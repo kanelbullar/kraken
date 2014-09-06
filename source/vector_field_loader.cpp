@@ -24,9 +24,9 @@ load(std::string const& path, std::array<unsigned short,3> const& dim) {
 
        if(length != 0) {
 
-         source = new char[length - 1];
+         source = new char[length];
 
-         input.get(source,length,EOF);
+         input.get(source,length);
 
          if(input.gcount() != length - 1) {
 
@@ -66,6 +66,12 @@ min_max (unsigned long size) const {
       absolute = sqrt(pow(data_[index]  ,2) + 
                       pow(data_[index+1],2) + 
                       pow(data_[index+2],2));
+
+      if(index == 0) {
+
+         min = absolute;
+         max = absolute;
+      }
 
       if     (absolute < min) min = absolute;
       else if(absolute > max) max = absolute;

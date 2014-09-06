@@ -15,7 +15,7 @@ res_(std::array<unsigned short,2> {{width,height}})
 
 void viewer::
 
-open(vector_field const& vf) {
+open(vector_field const& vf, transfer_function const& tf) {
 
    handle_ = glutCreateWindow("Kraken");
 
@@ -56,6 +56,7 @@ open(vector_field const& vf) {
          // init config
          config::init(aspect_ratio);
          config::bind_field(vf);
+         config::bind_transfer_function(tf);
 
          glutMainLoop();
 
@@ -74,7 +75,7 @@ init(int argc,char** argv) const {
    glutInitWindowPosition(0,0);
    glutInitWindowSize(res_[0],res_[1]);
 
-   glutInitDisplayMode(GLUT_RGBA | GLUT_DOUBLE | GLUT_DEPTH | GLUT_MULTISAMPLE);
+   glutInitDisplayMode(GLUT_RGBA | GLUT_DOUBLE | GLUT_MULTISAMPLE);
 
    glutInitContextVersion(4,4);
    glutInitContextFlags(GLUT_FORWARD_COMPATIBLE);

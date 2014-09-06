@@ -3,6 +3,7 @@
 
 #include <pipeline.hpp>
 #include <vector_field.hpp>
+#include <transfer_function.hpp>
 
 #include <GL/freeglut.h>
 
@@ -31,6 +32,8 @@ class config {
 
    static void bind_field(vector_field const&);
 
+   static void bind_transfer_function(transfer_function const&);
+
    static void clear();
 
 
@@ -55,7 +58,7 @@ class config {
 
    static std::array<GLuint,2> array_ptr_;
 
-   static GLuint tex_id_;
+   static std::array<GLuint,2> tex_id_;
 
    static unsigned short frame_number_;
 

@@ -1,4 +1,4 @@
-#version 330
+#version 440
 
 #define base_number 10
 
@@ -9,19 +9,24 @@ uniform mat4 perspective_view;
 uniform ivec3 dim;
 uniform vec2 interval;
 uniform sampler3D vf;
+uniform sampler1D tf;
 
-out vec3 color;
+out vec4 color;
 
-vec3 transfer(float absolute) {
+vec4 transfer(float absolute) {
 
    vec3 c_min = vec3(0.0,0.0,1.0),
         c_max = vec3(1.0,0.0,0.0);
 
    float range = interval[1] - interval[0];
 
-   float weight = (absolute - interval[0]) / range;
+   float normalized_length = (absolute - interval[0]) / range;
 
-   return  (1.0 - weight) * c_min + weight * c_max;
+   //if(normalized_length > 0.0 && normalized_length < 1.0)
+
+      //return vec4(0.0,1.0,0.0,1.0);
+
+   return  texture(tf,normalized_length).rgba;
 }
 
 vec3 convert(vec3 particle_pos) {
@@ -71,8 +76,9 @@ void main () {
 
       p_pos += n;
       
-      vec3 geom_color = transfer(length(n));
+      vec4 geom_color = transfer(length(n));
 
+      //if(geom_color.a==1) geom_color = vec4(1.0,1.0,1.0,1.0); 
       color = geom_color;
       gl_Position = perspective_view * vec4(p_pos,1.0);
       EmitVertex();

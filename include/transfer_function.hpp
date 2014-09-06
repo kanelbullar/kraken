@@ -1,44 +1,33 @@
 #ifndef KRAKEN_TRANSFER_FUNCTION
 #define KRAKEN_TRANSFER_FUNCTION
 
-#include <set>
+#include <vector>
 #include <array>
-#include <random>
+#include <algorithm>
 #include <iostream>
 
 namespace kraken {
 typedef std::array<float,4> rgba;
 
 struct control_point {
-   inline control_point(float pos,rgba col):position(pos),
-                                            color(col) {}
+
+   control_point(float,rgba const&);
+
+   bool operator < (control_point const&) const;
+
+   /*inline control_point& operator= (control_point const& cp)  {
+      position = cp.position;
+      color    = cp.color;
+      return *this;
+   }*/
+
    float position;
    rgba color;
-
-   inline bool operator < (control_point const& cp) {
-      return this->position < cp.position;
-   }
-
-   inline bool operator > (control_point const& cp) {
-      return position > cp.position;
-   }
-
-   inline bool operator == (control_point const& cp) {
-      return position == cp.position;
-   }
 };
 
-inline bool operator < (control_point const& cp1, control_point const& cp2) {
+/*inline bool operator < (control_point const& cp1, control_point const& cp2) {
    return cp1 < cp2;
-}
-
-inline bool operator > (control_point const& cp1, control_point const& cp2) {
-   return cp1 > cp2;
-}
-
-inline bool operator == (control_point const& cp1, control_point const& cp2) {
-   return cp1 == cp2;
-}
+}*/
 
 
 class transfer_function {
@@ -48,14 +37,17 @@ class transfer_function {
    transfer_function();
    ~transfer_function();
    void add (float, rgba);
-   void finish (); 
+   float* finish () const; 
+   unsigned short resolution() const;
 
    private:
 
-   control_point left(float);
-   control_point right(float);
+   void sort() const;
+
+   control_point left_calc(float) const;
+   control_point right_calc(float) const;
    unsigned short resolution_;
-   std::set <control_point> control_points_;
+   mutable std::vector <control_point> control_points_;
 };
 
 }

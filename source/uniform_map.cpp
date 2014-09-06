@@ -57,17 +57,17 @@ load(uniform_link const& ul) const {
 
     else {
 
-      std::cerr << std::endl
+      /*std::cerr << std::endl
                 << "uniform [" << uniform_name << "] isn't bound"
-                << std::endl;
+                << std::endl;*/
     }
   }
 
   else {
 
-    std::cerr << std::endl
+    /*std::cerr << std::endl
               << "uniform [" << uniform_name << "] isn't aviable"
-              << std::endl;
+              << std::endl;*/
   }
 }
 
