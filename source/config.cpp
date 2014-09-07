@@ -20,9 +20,9 @@ unsigned short config::frame_number_    = 0;
 unsigned short config::particle_number_ = 0;
 
 float config::aspect_ratio_ = 0.0f;
-float config::depth_ = -300.0f;
+float config::depth_ = -200.0f;
 
-std::array<float,2> config::rot_ = {{0.0f,0.0f}};
+std::array<float,2> config::rot_ = {{1.6f,0.0f}};
 
 bool config::dirty_ = true;
 
@@ -38,45 +38,44 @@ void config::
 
 display() {
 
-   if(dirty_ || switch_) {
+   if(switch_) {
 
-      if(switch_) {
+      pipeline_.enable(program_);
 
-         pipeline_.enable(program_);
+      if(program_.compare("glyph") == 0) {
 
-         if(program_.compare("glyph")) {
+         glDisable(GL_BLEND);
+         glEnable(GL_DEPTH_TEST);
+      }
 
-            glEnable(GL_DEPTH_TEST);
-         }
+      else if(program_.compare("streamline") == 0) {
 
-         else if(program_.compare("streamline")) {
-
-            glDisable(GL_DEPTH_TEST);
-         }
+         glDisable(GL_DEPTH_TEST);
+         glEnable(GL_BLEND);
+         glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
+         glBlendEquation(GL_FUNC_ADD);
+      }
 
          switch_ = false;
-      }
-
-      glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-      glDrawArrays(GL_POINTS,0,particle_number_);
-
-      if(bbox_) {
-
-         glBindVertexArray(array_ptr_[0]);
-
-         pipeline_.enable("bounding_box");
-
-         glDrawArrays(GL_POINTS,0,1);
-
-         glBindVertexArray(array_ptr_[1]);
-
-         pipeline_.enable(program_);
-      }
-
-      glutSwapBuffers();
-
-      dirty_ = false;
    }
+
+   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+   glDrawArrays(GL_POINTS,0,particle_number_);
+
+   if(bbox_) {
+
+      glBindVertexArray(array_ptr_[0]);
+
+      pipeline_.enable("bounding_box");
+
+      glDrawArrays(GL_POINTS,0,1);
+
+      glBindVertexArray(array_ptr_[1]);
+
+      pipeline_.enable(program_);
+   }
+
+   glutSwapBuffers();
 
    glutPostRedisplay();
 
@@ -94,15 +93,15 @@ key(unsigned char key,int x,int y) {
 
       case  27 : glutLeaveMainLoop(); break;
 
-      case  43 : depth_ += 0.5f; init_perspective(); switch_ = true; break;
+      case  43 : depth_ += 1.0f; init_perspective(); switch_ = true; break;
 
-      case  45 : depth_ -= 0.5f; init_perspective(); switch_ = true; break;
+      case  45 : depth_ -= 1.0f; init_perspective(); switch_ = true; break;
 
       case  49 : program_ = "glyph"; switch_ = true ; break;
 
       case  50 : program_ = "streamline"; switch_ = true; break;
 
-      case  98 : bbox_  = !bbox_; dirty_ = true; break;
+      case  98 : bbox_  = !bbox_; break;
 
       case 114 : pipeline_.link_programs(); switch_ = true; break;
    }
@@ -155,11 +154,8 @@ void config::
 
 init(float aspect_ratio) {
 
-   glEnable(GL_BLEND);
-   glBlendFunc(GL_SRC_ALPHA,GL_ONE);
-   //glEnable(GL_DEPTH_TEST);
    glEnable(GL_MULTISAMPLE_ARB);
-   glClearColor(0.2,0.2,0.2,1.0);
+   glClearColor(0.0,0.0,0.0,0.0);
 
    aspect_ratio_ = aspect_ratio;
 
@@ -187,12 +183,10 @@ void config::bind_field(vector_field const& vf) {
 
 void config::bind_transfer_function(transfer_function const& tf) {
 
-   glUseProgram(2);
-   
    float* data = tf.finish();
    GLvoid* data_ptr = reinterpret_cast<GLvoid*>(data);
 
-   float border_color[] = {1.0f,0.0f,0.0f,0.0f};
+   float border_color[] = {0.0f,0.0f,0.0f,0.0f};
 
    glGenTextures(1, &tex_id_[0]);
 
@@ -210,6 +204,7 @@ void config::bind_transfer_function(transfer_function const& tf) {
    glTexImage1D(GL_TEXTURE_1D, 0, GL_RGBA32F,
                 100, 0, GL_RGBA, GL_FLOAT, data_ptr);
 
+   glUseProgram(2);
    glUniform1i(glGetUniformLocation(2,"tf"),0);
 }
 
@@ -305,7 +300,7 @@ init_memory(std::array<unsigned short,3> const& dim) {
    // generate particles
    particle_emitter emitter;
    
-   particles pos(emitter.raster(40,dim));
+   particles pos(emitter.raster(100,dim));
 
    particle_number_ = pos.size_ / (3 * sizeof(float));
 
@@ -362,8 +357,6 @@ void config::
 
 init_texture(vector_field const& vf) {
 
-   glUseProgram(2);
-
    float border_color[] = {0.0f,0.0f,0.0f,0.0f};
 
    glGenTextures(1, &tex_id_[1]);
@@ -384,7 +377,9 @@ init_texture(vector_field const& vf) {
                 vf.dim_[0], vf.dim_[1], vf.dim_[2],
                 0, GL_RGB, GL_FLOAT, vf.data_);
 
+   glUseProgram(1);
    glUniform1i(glGetUniformLocation(1,"vf"),1);
+   glUseProgram(2);
    glUniform1i(glGetUniformLocation(2,"vf"),1);
 }
 

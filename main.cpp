@@ -5,12 +5,10 @@
 int main(int argc,char** argv) {
 
    kraken::transfer_function trans;
-   trans.add(0.0,std::array<float,4>{{0.0,0.0,0.0,0.0}});
-   //trans.add(0.6,std::array<float,4>{{0.0,1.0,1.0,0.0}});
-   trans.add(1.0,std::array<float,4>{{1.0,0.0,0.0,1.0}});
 
-   /*trans.add(0.0,std::array<float,4>{{1.0,0.0,0.0,0.0}});
-   trans.add(1.0,std::array<float,4>{{0.0,1.0,0.0,1.0}});*/
+   trans.add(0.0,kraken::rgba{{1.0,0.0,0.0,0.3}});
+   //trans.add(0.3,kraken::rgba{{0.0,1.0,1.0,0.5}});
+   trans.add(0.5,kraken::rgba{{0.0,1.0,0.0,1.0}});
 
    std::array<unsigned short,3> dim{{128,128,128}};
 

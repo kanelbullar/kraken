@@ -75,7 +75,7 @@ init(int argc,char** argv) const {
    glutInitWindowPosition(0,0);
    glutInitWindowSize(res_[0],res_[1]);
 
-   glutInitDisplayMode(GLUT_RGBA | GLUT_DOUBLE | GLUT_MULTISAMPLE);
+   glutInitDisplayMode(GLUT_RGBA | GLUT_DOUBLE | GLUT_DEPTH | GLUT_MULTISAMPLE);
 
    glutInitContextVersion(4,4);
    glutInitContextFlags(GLUT_FORWARD_COMPATIBLE);

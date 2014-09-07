@@ -26,7 +26,7 @@ vec4 transfer(float absolute) {
 
       //return vec4(0.0,1.0,0.0,1.0);
 
-   return  texture(tf,normalized_length).rgba;
+   return  texture(tf,clamp(normalized_length,0.0,1.0)).rgba;
 }
 
 vec3 convert(vec3 particle_pos) {
