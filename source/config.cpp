@@ -44,11 +44,16 @@ display() {
 
       if(program_.compare("glyph") == 0) {
 
+         glUniform1i(glGetUniformLocation(1,"vf"),1);
+
          glDisable(GL_BLEND);
          glEnable(GL_DEPTH_TEST);
       }
 
       else if(program_.compare("streamline") == 0) {
+
+         glUniform1i(glGetUniformLocation(2,"vf"),1);
+         glUniform1i(glGetUniformLocation(2,"tf"),0);
 
          glDisable(GL_DEPTH_TEST);
          glEnable(GL_BLEND);
@@ -203,9 +208,6 @@ void config::bind_transfer_function(transfer_function const& tf) {
 
    glTexImage1D(GL_TEXTURE_1D, 0, GL_RGBA32F,
                 100, 0, GL_RGBA, GL_FLOAT, data_ptr);
-
-   glUseProgram(2);
-   glUniform1i(glGetUniformLocation(2,"tf"),0);
 }
 
 void config::clear() {
@@ -376,11 +378,6 @@ init_texture(vector_field const& vf) {
    glTexImage3D(GL_TEXTURE_3D, 0, GL_RGB32F,
                 vf.dim_[0], vf.dim_[1], vf.dim_[2],
                 0, GL_RGB, GL_FLOAT, vf.data_);
-
-   glUseProgram(1);
-   glUniform1i(glGetUniformLocation(1,"vf"),1);
-   glUseProgram(2);
-   glUniform1i(glGetUniformLocation(2,"vf"),1);
 }
 
 }
