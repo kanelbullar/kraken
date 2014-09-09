@@ -26,7 +26,7 @@ int main(int argc,char** argv) {
 
    else if(argc == 2 && std::string("cylinder").compare(argv[1]) == 0) {
 
-      v.open(loader.load("data/cyl_float.raw",dim),trans);
+      v.open(loader.load("data/cylinder.raw",dim),trans);
    }
 
    else v.open(loader.load("data/tornado.raw",dim),trans);
