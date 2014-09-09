@@ -52,11 +52,11 @@ vec3 runge_kutta(vec3 particle_pos) {
    texture_pos = convert(x1);
    vec3 v1 = texture(vf,texture_pos).rgb;
 
-   vec3 x2 = x1 + 0.5 * v1;
+   vec3 x2 = x0 + 0.5 * v1;
    texture_pos = convert(x2);
    vec3 v2 = texture(vf,texture_pos).rgb;
 
-   vec3 x3 = x2 + v2;
+   vec3 x3 = x0 + v2;
    texture_pos = convert(x3);
    vec3 v3 = texture(vf,texture_pos).rgb;
 
@@ -66,7 +66,7 @@ vec3 runge_kutta(vec3 particle_pos) {
 void main () {
 
    vec3 p_pos = gl_in[0].gl_Position.xyz;
-   vec3 n;   
+   vec3 n;
 
    for(int i = 0; i <= base_number; ++i) {
      

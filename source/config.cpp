@@ -302,7 +302,7 @@ init_memory(std::array<unsigned short,3> const& dim) {
    // generate particles
    particle_emitter emitter;
    
-   particles pos(emitter.raster(100,dim));
+   particles pos(emitter.raster(20,dim));
 
    particle_number_ = pos.size_ / (3 * sizeof(float));
 

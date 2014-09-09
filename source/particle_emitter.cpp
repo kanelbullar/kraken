@@ -121,7 +121,7 @@ namespace kraken {
 
 
    particles const particle_emitter::convert(std::vector<pos3> const& position) const {
-      unsigned size = position.size() * 3 , index = 0;     
+      unsigned long size = position.size() * 3 , index = 0;     
       float* data = new float[size];      
       for(auto it = position.begin(); it != position.end(); ++it) {
 
